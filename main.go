@@ -22,8 +22,16 @@ type Player struct {
 	Name string
 }
 
-type Game struct {
+type Info struct {
 	Hand []Card
+	Table []Card
+	NextPlayer int
+	Players []Player
+}
+
+type Game struct {
+	Table []Card
+	NextPlayer int
 }
 
 var Deck = []Card{
@@ -62,7 +70,7 @@ var Deck = []Card{
 }
 
 var players []Player
-
+var game Game
 
 func main() {
 	players = []Player{
@@ -72,10 +80,14 @@ func main() {
 		{Id: 3, Name: "Diana"},
 	}
 
+	game.NextPlayer = 0
+
 	shuffleDeck()
 	dealCards()
 
 	http.HandleFunc("/play", playHandler)
+	http.HandleFunc("/trick", trickHandler)
+	http.HandleFunc("/finish", finishHandler)
 	http.ListenAndServe(":9010", nil)
 }
 
@@ -91,6 +103,73 @@ func shuffleDeck() {
 		j := rand.Intn(i + 1)
 		Deck[i], Deck[j] = Deck[j], Deck[i]
 	}
+}
+
+func finishHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Content-Type", "application/json")
+
+	// Preflight abfangen
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	scores := make(map[int]int)
+	for _, player := range players {
+		scores[player.Id] = player.getPoints()
+	}
+
+	json.NewEncoder(w).Encode(scores)
+}
+
+func trickHandler(w http.ResponseWriter, r *http.Request) {
+	
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Content-Type", "application/json")
+	// Preflight abfangen
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+	
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	var requestBody struct {
+		Player int `json:"player"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&requestBody); err != nil {
+		http.Error(w, "Invalid JSON", http.StatusBadRequest)
+		return
+	}
+
+	player := players[requestBody.Player]
+	success := player.getTrick()
+	if !success {
+		http.Error(w, "Not enough cards on table", http.StatusBadRequest)
+		return
+	}
+
+	Info := Info{
+		Hand: players[requestBody.Player].Hand(),
+		Table: getTable(),
+		NextPlayer: game.NextPlayer,
+		Players: players,
+	}
+
+	json.NewEncoder(w).Encode(Info)
 }
 
 func playHandler(w http.ResponseWriter, r *http.Request) {
@@ -121,10 +200,7 @@ func playHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	
-	fmt.Println("Player", requestBody.Player, "plays card", requestBody.Card)
-
-	if(requestBody.Card >0 ) {
+	if(requestBody.Card > 0 && requestBody.Player == game.NextPlayer &&  len(getTable()) < 4) {
 		card := getCardById(requestBody.Card)
 
 		if(card.Player != requestBody.Player || card.Place != "Hand") {
@@ -133,15 +209,33 @@ func playHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		card.Player = -1
-		card.Place = "Played"
+		card.Place = "Table"
+
+		game.NextPlayer = (requestBody.Player + 1) % 4
+
+		fmt.Println("Player", requestBody.Player, "plays card", requestBody.Card)
+	} 
+
+	if len(getTable()) == 4 {
+		game.NextPlayer = -1
 	}
 
-
-	game := Game{
+	Info := Info{
 		Hand: players[requestBody.Player].Hand(),
+		Table: getTable(),
+		NextPlayer: game.NextPlayer,
+		Players: players,
 	}
 
-	json.NewEncoder(w).Encode(game)
+	json.NewEncoder(w).Encode(Info)
+}
+
+func getPlayerNames() map[int]string {
+	info := make(map[int]string)
+	for _, player := range players {
+		info[player.Id] = player.Name
+	}
+	return info
 }
 
 func getCardById(id int) *Card {
@@ -153,6 +247,15 @@ func getCardById(id int) *Card {
 	return nil
 }
 
+func getTable() []Card {
+	var table []Card
+	for _, card := range Deck {
+		if card.Place == "Table" {
+			table = append(table, card)
+		}
+	}
+	return table
+}
 
 func (p Player) Hand() []Card {
 	var hand []Card
@@ -162,4 +265,32 @@ func (p Player) Hand() []Card {
 		}
 	}
 	return hand
+}
+
+func (p Player) getTrick() bool{
+	tableCards := getTable()
+	if len(tableCards) < 4 {
+		return false
+	}
+		
+	for i := range tableCards {
+		card := getCardById(tableCards[i].Id)
+		card.Player = p.Id
+		card.Place = "Trick"
+	}
+
+	game.NextPlayer = p.Id
+
+	fmt.Println("Player", p.Id, "takes the trick")
+	return true
+}
+
+func (p Player) getPoints() int {
+	points := 0
+	for _, card := range Deck {
+		if card.Player == p.Id && card.Place == "Trick" {
+			points += card.Value
+		}
+	}
+	return points
 }

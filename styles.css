@@ -12,3 +12,9 @@
         }
     }
 }
+
+.your-turn{
+    color: white;
+    padding: 4px;
+    background-color: green;
+}
