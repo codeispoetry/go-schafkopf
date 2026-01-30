@@ -29,7 +29,7 @@ function render(data){
 function renderStatus(data){
     const playerInfoElement = document.getElementById('playerInfo');
     const player = getPlayer(parseInt(new URLSearchParams(window.location.search).get('player')), data.Players);
-    playerInfoElement.innerHTML = `You are: ${player.Name} with ${player.Points} points.`;
+    playerInfoElement.innerHTML = `You are: ${player.Name}`;
 
     const statusElement = document.getElementById('status');
     if(data.NextPlayer === parseInt(new URLSearchParams(window.location.search).get('player'))) {
@@ -44,10 +44,10 @@ function renderStatus(data){
 function getPlayer(id, players){
     for(const player of players){
         if(player.Id === id){
-            return {Name: player.Name, Points: player.Points};
+            return {Name: player.Name};
         }
     }
-    return {Name: "Unknown", Points: 0};
+    return {Name: "Unknown"};
 }
 
 function renderPlayer(data){
@@ -57,9 +57,26 @@ function renderPlayer(data){
         li = document.createElement('li');
         li.textContent = `${card.Suit} ${card.Rank}`;
         li.id = `${card.Id}`;
+        if(isCardPlayable(card, data)){
+            li.classList.add('playable');
+            li.addEventListener('click', playCard);
+        }
         handElement.appendChild(li);
-        li.addEventListener('click', playCard);
+        
     }
+}
+
+function isCardPlayable(card, data){
+    if(data.PlayableCards === null){
+        return false;
+    }
+    
+    for(const playableCard of data.PlayableCards){
+        if(playableCard.Id === card.Id){
+            return true;
+        }
+    }
+    return false;
 }
 
 function renderTable(data){
@@ -72,6 +89,12 @@ function renderTable(data){
         li = document.createElement('li');
         li.textContent = `${card.Suit} ${card.Rank}`;
         tableElement.appendChild(li);
+    }
+
+    if(data.Table !== null && data.Table.length === 4){
+        document.getElementById('getTrick').removeAttribute('disabled');
+    } else {
+        document.getElementById('getTrick').setAttribute('disabled', 'true');   
     }
 }
 

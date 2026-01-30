@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"math/rand"
 	"fmt"
+	"sort"
 )
 
 
@@ -27,11 +28,13 @@ type Info struct {
 	Table []Card
 	NextPlayer int
 	Players []Player
+	PlayableCards []Card
 }
 
 type Game struct {
 	Table []Card
 	NextPlayer int
+	TrumpSuit string
 }
 
 var Deck = []Card{
@@ -81,6 +84,7 @@ func main() {
 	}
 
 	game.NextPlayer = 0
+	game.TrumpSuit = "Herz"
 
 	shuffleDeck()
 	dealCards()
@@ -224,6 +228,7 @@ func playHandler(w http.ResponseWriter, r *http.Request) {
 		Hand: players[requestBody.Player].Hand(),
 		Table: getTable(),
 		NextPlayer: game.NextPlayer,
+		PlayableCards: PlayableCards(),
 		Players: players,
 	}
 
@@ -264,6 +269,30 @@ func (p Player) Hand() []Card {
 			hand = append(hand, card)
 		}
 	}
+
+	// Sort cards by trump status and then by suit/rank order
+	sort.Slice(hand, func(i, j int) bool {
+		cardI, cardJ := hand[i], hand[j]
+		
+		// Trump cards come first
+		if cardI.isTrump() && !cardJ.isTrump() {
+			return true
+		}
+		if !cardI.isTrump() && cardJ.isTrump() {
+			return false
+		}
+		
+		// Both trump or both non-trump - sort by suit then rank
+		if cardI.Suit != cardJ.Suit {
+			return cardI.Suit < cardJ.Suit
+		}
+		
+		rankOrder := map[string]int{
+			"Ober": 0, "Unter": 1,  "As": 2, 
+			"10": 3, "König": 4, "9": 5, "8": 6, "7": 7,
+		}
+		return rankOrder[cardI.Rank] < rankOrder[cardJ.Rank]
+	})
 	return hand
 }
 
@@ -293,4 +322,40 @@ func (p Player) getPoints() int {
 		}
 	}
 	return points
+}
+
+func PlayableCards() []Card {
+	if(game.NextPlayer == -1) {
+		return []Card{}
+	}
+
+	var allowed []Card
+	tableCards := getTable()
+	if len(tableCards) == 0 {
+		return players[game.NextPlayer].Hand()
+	}
+
+	leadCard := tableCards[0]
+
+	for _, card := range players[game.NextPlayer].Hand() {
+		if leadCard.isTrump() {
+			if card.isTrump() {
+				allowed = append(allowed, card)
+			}
+		} else {
+			if card.Suit == leadCard.Suit && !card.isTrump() {
+				allowed = append(allowed, card)
+			}
+		}
+	}
+
+	if len(allowed) == 0 {
+		return players[game.NextPlayer].Hand()
+	}
+
+	return allowed
+}
+
+func (c Card) isTrump() bool {
+	return c.Suit == game.TrumpSuit || c.Rank == "Ober" || c.Rank == "Unter"
 }
