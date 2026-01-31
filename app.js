@@ -3,7 +3,7 @@ var player
 
 document.addEventListener('DOMContentLoaded', function() {
    player = parseInt(new URLSearchParams(window.location.search).get('player'));
-   gameInterval = setInterval(render, 1500);
+   gameInterval = setInterval(render, 100);
    render();
 });
 
@@ -37,16 +37,17 @@ function render(){
 function renderStatus(data) {
     const playerInfoElement = document.getElementById('playerInfo');
     const currentPlayer = getPlayer(player, data.Players);
-    playerInfoElement.innerHTML = `You are: ${currentPlayer.Name}`;
+    playerInfoElement.innerHTML = `${currentPlayer.Name}`;
 
     const statusElement = document.getElementById('status');
+    statusElement.classList.remove('your-turn');
+    statusElement.innerHTML = '';
     if(data.NextPlayer === player) {
         statusElement.innerHTML = `Your Turn!`;
         statusElement.classList.add('your-turn');
         return;
     }
-    statusElement.classList.remove('your-turn');
-    statusElement.innerHTML = `Next Player: ${getPlayer(data.NextPlayer, data.Players).Name}`;
+
 }
 
 function renderTable(data){
@@ -78,6 +79,9 @@ function getPlayer(id, players){
 }
 
 function renderPlayer(data){
+    if( data.Hand === null ){
+        return;
+    }
     const handElement = document.getElementById('hand');
     handElement.innerHTML = '';
     for (const card of data.Hand) {
@@ -128,6 +132,7 @@ function playCard(event) {
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
+        render()
        
     })
     .catch(error => console.error('Error:', error));
