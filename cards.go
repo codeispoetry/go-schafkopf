@@ -10,10 +10,8 @@ type Card struct {
 	Player     int    // ID of the player who currently holds the card, or has won it
 	Place      string // "Deck", "Hand", "Table", "Trick"
 	Position   int    // position on the table when played
-	Playable  bool   // whether the card is currently playable
+	Playable   bool   // whether the card is currently playable
 }
-
-
 
 
 func (c Card) isTrump() bool {
@@ -52,3 +50,12 @@ func (c Card) isPlayable() bool {
 	return false;
 }
 
+
+func getCardById(id int) *Card {
+	for i := range Deck {
+		if Deck[i].Id == id {
+			return &Deck[i]
+		}
+	}
+	return nil
+}

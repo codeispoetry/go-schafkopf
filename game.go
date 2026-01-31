@@ -1,8 +1,16 @@
 package main
 
 import (
+	"sort"
 	"math/rand"
 )
+
+type Game struct {
+	Table      []Card
+	NextPlayer int
+	TrumpSuit  string
+}
+
 
 func dealCards() {
 	for i := 0; i < 32; i++ {
@@ -41,4 +49,19 @@ func whoWonTrick() int {
 
 	
 	return highestCard.Player
+}
+
+func getTable() []Card {
+	var table []Card
+	for _, card := range Deck {
+		if card.Place == "Table" {
+			table = append(table, card)
+		}
+	}
+
+	// Sort table cards by player ID
+	sort.Slice(table, func(i, j int) bool {
+		return table[i].Position < table[j].Position
+	})
+	return table
 }

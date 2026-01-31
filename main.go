@@ -50,11 +50,6 @@ var Deck = []Card{
 var players []*Player
 var game Game
 
-type Game struct {
-	Table      []Card
-	NextPlayer int
-	TrumpSuit  string
-}
 
 
 func main() {

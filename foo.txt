@@ -1,2 +1,0 @@
-# schafkopf
-./cards.go:32:31: players[game.NextPlayer].hasTrump undefined (type *Player has no field or method hasTrump)
