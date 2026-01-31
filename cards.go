@@ -12,21 +12,8 @@ type Card struct {
 	Position   int    // position on the table when played
 }
 
-type Info struct {
-	Hand          []Card
-	Table         []Card
-	NextPlayer    int
-	Players       []*Player
-	PlayableCards []Card
-	TrickWinner   int
-	Scores        map[int]int
-}
 
-type Game struct {
-	Table      []Card
-	NextPlayer int
-	TrumpSuit  string
-}
+
 
 func (c Card) isTrump() bool {
 	return c.Suit == game.TrumpSuit || c.Rank == "Ober" || c.Rank == "Unter"

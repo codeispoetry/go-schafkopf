@@ -50,6 +50,13 @@ var Deck = []Card{
 var players []*Player
 var game Game
 
+type Game struct {
+	Table      []Card
+	NextPlayer int
+	TrumpSuit  string
+}
+
+
 func main() {
 	players = []*Player{
 		&Player{Id: 0, Name: "Tom", Score: 0},
