@@ -3,8 +3,16 @@ var player
 
 document.addEventListener('DOMContentLoaded', function() {
    player = parseInt(new URLSearchParams(window.location.search).get('player'));
-   gameInterval = setInterval(render, 100);
    render();
+   const ws = new WebSocket("ws://localhost:9010/ws");
+
+    ws.onmessage = (event) => {
+       render()
+    };
+
+    ws.onclose = () => {
+        console.log("connection closed");
+    };
 });
 
 /////////////////////////////
@@ -118,6 +126,7 @@ function isCardPlayable(card, data){
 // Actions
 ///////////////////////////////
 function playCard(event) {
+    console.log(`Playing card with id: ${event.target.id} by player ${player}`);
     fetch('http://localhost:9010/play', {
         method: 'POST',
         headers: {
@@ -150,9 +159,12 @@ function getTrick(){
             "player": player
         })
     })
-    .then(response => response.json())
-    .then(data => {
-        render(data);
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        render()
+       
     })
     .catch(error => console.error('Error:', error));
 }

@@ -56,6 +56,10 @@ func main() {
 	shuffleDeck()
 	dealCards()
 
+	http.HandleFunc("/ws", handleWSClient)
+
+
+
 	http.HandleFunc("/render", renderHandler)
 
 	http.HandleFunc("/play", playHandler)

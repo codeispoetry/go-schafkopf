@@ -71,14 +71,8 @@ func trickHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	Info := Info{
-		Hand:       players[requestBody.Player].Hand(),
-		Table:      getTable(),
-		NextPlayer: game.NextPlayer,
-		Players:    players,
-	}
-
-	json.NewEncoder(w).Encode(Info)
+	w.WriteHeader(http.StatusOK)
+	pingAllClients()
 }
 
 
@@ -121,6 +115,9 @@ func playHandler(w http.ResponseWriter, r *http.Request) {
 		game.NextPlayer = -1
 	}
 
+		
+	w.WriteHeader(http.StatusOK)
+	pingAllClients()
 }
 
 func prepareResponse(w http.ResponseWriter, r *http.Request, method string) bool{
