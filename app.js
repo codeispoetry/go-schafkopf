@@ -1,5 +1,7 @@
+var gameInterval
+
 document.addEventListener('DOMContentLoaded', function() {
-   setInterval(getGame, 1500);
+   gameInterval = setInterval(getGame, 1500);
    getGame();
 });
 
@@ -17,7 +19,10 @@ function getGame(){
     .then(data => {
         render(data);
     })
-    .catch(error => console.error('Error:', error));
+    .catch(error => {
+        console.error('Error:', error);
+        clearInterval(gameInterval);
+    });
 }
 
 function render(data){
