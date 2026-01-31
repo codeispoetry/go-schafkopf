@@ -1,49 +1,71 @@
 var gameInterval
+var player
 
 document.addEventListener('DOMContentLoaded', function() {
-   gameInterval = setInterval(getGame, 1500);
-   getGame();
+   player = parseInt(new URLSearchParams(window.location.search).get('player'));
+   gameInterval = setInterval(render, 1500);
+   render();
 });
 
-function getGame(){
-     fetch('http://localhost:9010/play', {
+/////////////////////////////
+// Renderers
+/////////////////////////////
+function render(){
+    fetch('http://localhost:9010/render', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            "player": parseInt(new URLSearchParams(window.location.search).get('player'))
+            "player": player
         })
     })
     .then(response => response.json())
     .then(data => {
-        render(data);
+        renderPlayer(data);
+        renderTable(data);
+        renderStatus(data);
     })
     .catch(error => {
         console.error('Error:', error);
         clearInterval(gameInterval);
     });
+
+    
 }
 
-function render(data){
-    renderPlayer(data);
-    renderTable(data);
-    renderStatus(data);
-}
-
-function renderStatus(data){
+function renderStatus(data) {
     const playerInfoElement = document.getElementById('playerInfo');
-    const player = getPlayer(parseInt(new URLSearchParams(window.location.search).get('player')), data.Players);
-    playerInfoElement.innerHTML = `You are: ${player.Name}`;
+    const currentPlayer = getPlayer(player, data.Players);
+    playerInfoElement.innerHTML = `You are: ${currentPlayer.Name}`;
 
     const statusElement = document.getElementById('status');
-    if(data.NextPlayer === parseInt(new URLSearchParams(window.location.search).get('player'))) {
+    if(data.NextPlayer === player) {
         statusElement.innerHTML = `Your Turn!`;
         statusElement.classList.add('your-turn');
         return;
     }
     statusElement.classList.remove('your-turn');
     statusElement.innerHTML = `Next Player: ${getPlayer(data.NextPlayer, data.Players).Name}`;
+}
+
+function renderTable(data){
+    const tableElement = document.getElementById('table');
+    tableElement.innerHTML = '';
+    if(data.Table === null) {
+        return;
+    }
+    for (const card of data.Table) {
+        li = document.createElement('li');
+        li.textContent = `${card.Suit} ${card.Rank}`;
+        tableElement.appendChild(li);
+    }
+
+    if(data.Table !== null && data.Table.length === 4){
+        document.getElementById('getTrick').removeAttribute('disabled');
+    } else {
+        document.getElementById('getTrick').setAttribute('disabled', 'true');   
+    }
 }
 
 function getPlayer(id, players){
@@ -71,6 +93,9 @@ function renderPlayer(data){
     }
 }
 
+//////////////////////////////
+// Helpers
+//////////////////////////////
 function isCardPlayable(card, data){
     if(data.PlayableCards === null){
         return false;
@@ -84,28 +109,11 @@ function isCardPlayable(card, data){
     return false;
 }
 
-function renderTable(data){
-    const tableElement = document.getElementById('table');
-    tableElement.innerHTML = '';
-    if(data.Table === null) {
-        return;
-    }
-    for (const card of data.Table) {
-        li = document.createElement('li');
-        li.textContent = `${card.Suit} ${card.Rank}`;
-        tableElement.appendChild(li);
-    }
 
-    if(data.Table !== null && data.Table.length === 4){
-        document.getElementById('getTrick').removeAttribute('disabled');
-    } else {
-        document.getElementById('getTrick').setAttribute('disabled', 'true');   
-    }
-}
-
+///////////////////////////////
+// Actions
+///////////////////////////////
 function playCard(event) {
-    const player = parseInt(new URLSearchParams(window.location.search).get('player'));
-    
     fetch('http://localhost:9010/play', {
         method: 'POST',
         headers: {
@@ -116,9 +124,11 @@ function playCard(event) {
             "card": parseInt(event.target.id)
         })
     })
-    .then(response => response.json())
-    .then(data => {
-        render(data);
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+       
     })
     .catch(error => console.error('Error:', error));
 }
@@ -132,7 +142,7 @@ function getTrick(){
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            "player": parseInt(new URLSearchParams(window.location.search).get('player'))
+            "player": player
         })
     })
     .then(response => response.json())

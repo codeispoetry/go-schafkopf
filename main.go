@@ -56,7 +56,9 @@ func main() {
 	shuffleDeck()
 	dealCards()
 
+	http.HandleFunc("/render", renderHandler)
 	http.HandleFunc("/play", playHandler)
+
 	http.HandleFunc("/trick", trickHandler)
 	http.HandleFunc("/finish", finishHandler)
 	http.ListenAndServe(":9010", nil)
