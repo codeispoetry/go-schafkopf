@@ -95,7 +95,7 @@ function renderPlayer(data){
         li = document.createElement('li');
         li.textContent = `${card.Suit} ${card.Rank}`;
         li.id = `${card.Id}`;
-        if(isCardPlayable(card, data)){
+        if(card.Playable){
             li.classList.add('playable');
             li.addEventListener('click', playCard);
         }
@@ -106,19 +106,6 @@ function renderPlayer(data){
 //////////////////////////////
 // Helpers
 //////////////////////////////
-function isCardPlayable(card, data){
-    if(data.PlayableCards === null){
-        return false;
-    }
-    
-    for(const playableCard of data.PlayableCards){
-        if(playableCard.Id === card.Id){
-            return true;
-        }
-    }
-    return false;
-}
-
 function getPlayer(id, players){
     for(const player of players){
         if(player.Id === id){

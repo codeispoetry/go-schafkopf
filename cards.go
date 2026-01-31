@@ -10,6 +10,7 @@ type Card struct {
 	Player     int    // ID of the player who currently holds the card, or has won it
 	Place      string // "Deck", "Hand", "Table", "Trick"
 	Position   int    // position on the table when played
+	Playable  bool   // whether the card is currently playable
 }
 
 
@@ -19,34 +20,35 @@ func (c Card) isTrump() bool {
 	return c.Suit == game.TrumpSuit || c.Rank == "Ober" || c.Rank == "Unter"
 }
 
-func PlayableCards() []Card {
-	if game.NextPlayer == -1 {
-		return []Card{}
-	}
-
-	var allowed []Card
+func (c Card) isPlayable() bool {
 	tableCards := getTable()
 	if len(tableCards) == 0 {
-		return players[game.NextPlayer].Hand()
+		return true // I am the lead player and can play any card
 	}
-
+	
 	leadCard := tableCards[0]
-
-	for _, card := range players[game.NextPlayer].Hand() {
-		if leadCard.isTrump() {
-			if card.isTrump() {
-				allowed = append(allowed, card)
+	
+	if( leadCard.isTrump() ) {
+		if( !players[game.NextPlayer].HasTrump ) {
+			return true
+		} else{
+			if( c.isTrump() ) {
+				return true
 			}
-		} else {
-			if card.Suit == leadCard.Suit && !card.isTrump() {
-				allowed = append(allowed, card)
+		}
+	}else{
+		leadSuit := leadCard.Suit
+		
+		if( !players[game.NextPlayer].HasSuit ) {
+			return true
+		}else{
+			if( c.Suit == leadSuit && !c.isTrump() ) {
+				return true
 			}
 		}
 	}
-
-	if len(allowed) == 0 {
-		return players[game.NextPlayer].Hand()
-	}
-
-	return allowed
+	
+		
+	return false;
 }
+

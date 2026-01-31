@@ -26,7 +26,6 @@ func renderHandler(w http.ResponseWriter, r *http.Request) {
 
 	Info := Info{
 		Hand:          players[requestBody.Player].Hand(),
-		PlayableCards: PlayableCards(),
 		Table:         getTable(),
 		NextPlayer:    game.NextPlayer,
 		Players:       players,
