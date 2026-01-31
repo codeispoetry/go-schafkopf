@@ -18,29 +18,27 @@ func shuffleDeck() {
 	}
 }
 
-func getHighestCard(cards []Card) Card {
-	highest := cards[0]
-	for _, card := range cards[1:] {
-		if card.isTrump() {
-			if !highest.isTrump() || card.Value > highest.Value {
-				highest = card
-			}
-		} else {
-			if !highest.isTrump() && card.Suit == highest.Suit && card.Value > highest.Value {
-				highest = card
-			}
-		}
-	}
-	return highest
-}
-
 func whoWonTrick() int {
 	if(len(getTable()) < 4) {
 		return -1
 	}
+	
 	tableCards := getTable()
-	highestCard := tableCards[1]
+	highestCard := tableCards[0]
+	leadSuit := tableCards[0].Suit
+	
+	for _, card := range tableCards[1:] {
+		if(card.isTrump()) {
+			if(card.FightOrder > highestCard.FightOrder) {
+				highestCard = card
+			}
+		 } else {
+			if(!highestCard.isTrump() && card.Suit == leadSuit && card.FightOrder > highestCard.FightOrder) {
+				highestCard = card
+			}
+		 }
+	}
 
+	
 	return highestCard.Player
 }
-

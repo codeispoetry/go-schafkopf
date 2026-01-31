@@ -1,98 +1,31 @@
 package main
 
-import (
-	"sort"
-)
-
 type Card struct {
-	Id     int
-	Suit   string
-	Rank   string
-	Value  int
-	Player int
-	Place  string
-	Position int
-}
-
-type Player struct {
-	Id   int
-	Name string
+	Id         int
+	Suit       string // e.g., "Eichel", "Gras", "Herz", "Schellen"
+	Rank       string // e.g., "Ober", "Unter", "König", "As", "10", "9", "8", "7"
+	Value      int    // point value of the card, 0, 2, 3, 4, 10, or 11
+	FightOrder int    // order in which cards win tricks
+	SortOrder  int    // order for sorting in hand
+	Player     int    // ID of the player who currently holds the card, or has won it
+	Place      string // "Deck", "Hand", "Table", "Trick"
+	Position   int    // position on the table when played
 }
 
 type Info struct {
 	Hand          []Card
 	Table         []Card
 	NextPlayer    int
-	Players       []Player
+	Players       []*Player
 	PlayableCards []Card
 	TrickWinner   int
+	Scores        map[int]int
 }
 
 type Game struct {
 	Table      []Card
 	NextPlayer int
 	TrumpSuit  string
-}
-
-func (p Player) Hand() []Card {
-	var hand []Card
-	for _, card := range Deck {
-		if card.Player == p.Id && card.Place == "Hand" {
-			hand = append(hand, card)
-		}
-	}
-
-	// Sort cards by trump status and then by suit/rank order
-	sort.Slice(hand, func(i, j int) bool {
-		cardI, cardJ := hand[i], hand[j]
-
-		// Trump cards come first
-		if cardI.isTrump() && !cardJ.isTrump() {
-			return true
-		}
-		if !cardI.isTrump() && cardJ.isTrump() {
-			return false
-		}
-
-		// Both trump or both non-trump - sort by suit then rank
-		if cardI.Suit != cardJ.Suit {
-			return cardI.Suit < cardJ.Suit
-		}
-
-		rankOrder := map[string]int{
-			"Ober": 0, "Unter": 1, "As": 2,
-			"10": 3, "König": 4, "9": 5, "8": 6, "7": 7,
-		}
-		return rankOrder[cardI.Rank] < rankOrder[cardJ.Rank]
-	})
-	return hand
-}
-
-func (p Player) getTrick() bool {
-	tableCards := getTable()
-	if len(tableCards) < 4 {
-		return false
-	}
-
-	for i := range tableCards {
-		card := getCardById(tableCards[i].Id)
-		card.Player = p.Id
-		card.Place = "Trick"
-	}
-
-	game.NextPlayer = p.Id
-
-	return true
-}
-
-func (p Player) getPoints() int {
-	points := 0
-	for _, card := range Deck {
-		if card.Player == p.Id && card.Place == "Trick" {
-			points += card.Value
-		}
-	}
-	return points
 }
 
 func (c Card) isTrump() bool {

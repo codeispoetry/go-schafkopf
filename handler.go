@@ -30,32 +30,18 @@ func renderHandler(w http.ResponseWriter, r *http.Request) {
 		Table:         getTable(),
 		NextPlayer:    game.NextPlayer,
 		Players:       players,
-		TrickWinner:    whoWonTrick(),
+		TrickWinner:   whoWonTrick(),
 	}
 
 	json.NewEncoder(w).Encode(Info)
 }
 
 
-func finishHandler(w http.ResponseWriter, r *http.Request) {
-	if (!prepareResponse(w, r, http.MethodGet)) {
-		return
-	}
-
-	scores := make(map[int]int)
-	for _, player := range players {
-		scores[player.Id] = player.getPoints()
-	}
-
-	json.NewEncoder(w).Encode(scores)
-}
-
 func trickHandler(w http.ResponseWriter, r *http.Request) {
 	if (!prepareResponse(w, r, http.MethodPost)) {
 		return
 	}
 	
-
 	var requestBody struct {
 		Player int `json:"player"`
 	}

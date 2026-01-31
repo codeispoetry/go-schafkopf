@@ -47,6 +47,8 @@ function renderStatus(data) {
     const currentPlayer = getPlayer(player, data.Players);
     playerInfoElement.innerHTML = `${currentPlayer.Name}`;
 
+    
+
     const statusElement = document.getElementById('status');
     statusElement.classList.remove('your-turn');
     statusElement.innerHTML = '';
