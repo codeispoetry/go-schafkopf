@@ -34,3 +34,13 @@ func getHighestCard(cards []Card) Card {
 	return highest
 }
 
+func whoWonTrick() int {
+	if(len(getTable()) < 4) {
+		return -1
+	}
+	tableCards := getTable()
+	highestCard := tableCards[1]
+
+	return highestCard.Player
+}
+

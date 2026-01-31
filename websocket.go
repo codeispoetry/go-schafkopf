@@ -44,7 +44,7 @@ func handleWSClient(w http.ResponseWriter, r *http.Request) {
 	for {
 		_, _, err := ws.ReadMessage()
 		if err != nil {
-			log.Println("client disconnected:", err)
+			//log.Println("client disconnected:", err)
 			return
 		}
 	}

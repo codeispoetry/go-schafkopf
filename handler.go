@@ -30,6 +30,7 @@ func renderHandler(w http.ResponseWriter, r *http.Request) {
 		Table:         getTable(),
 		NextPlayer:    game.NextPlayer,
 		Players:       players,
+		TrickWinner:    whoWonTrick(),
 	}
 
 	json.NewEncoder(w).Encode(Info)
@@ -75,7 +76,6 @@ func trickHandler(w http.ResponseWriter, r *http.Request) {
 	pingAllClients()
 }
 
-
 func playHandler(w http.ResponseWriter, r *http.Request) {
 	if (!prepareResponse(w, r, http.MethodPost)) {
 		return
@@ -103,8 +103,9 @@ func playHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	card.Player = -1
+	card.Position = len(getTable())
 	card.Place = "Table"
+
 
 	game.NextPlayer = (requestBody.Player + 1) % 4
 
@@ -112,6 +113,7 @@ func playHandler(w http.ResponseWriter, r *http.Request) {
 	
 
 	if len(getTable()) == 4 {
+
 		game.NextPlayer = -1
 	}
 

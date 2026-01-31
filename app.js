@@ -53,8 +53,14 @@ function renderStatus(data) {
     if(data.NextPlayer === player) {
         statusElement.innerHTML = `Your Turn!`;
         statusElement.classList.add('your-turn');
-        return;
     }
+
+    document.getElementById('getTrick').style.display = 'none';
+
+    if(data.TrickWinner !== -1 && player === data.TrickWinner){
+        document.getElementById('getTrick').style.display = 'block';
+    }
+    
 
 }
 
@@ -77,15 +83,6 @@ function renderTable(data){
     }
 }
 
-function getPlayer(id, players){
-    for(const player of players){
-        if(player.Id === id){
-            return {Name: player.Name};
-        }
-    }
-    return {Name: "Unknown"};
-}
-
 function renderPlayer(data){
     if( data.Hand === null ){
         return;
@@ -101,7 +98,6 @@ function renderPlayer(data){
             li.addEventListener('click', playCard);
         }
         handElement.appendChild(li);
-        
     }
 }
 
@@ -121,12 +117,20 @@ function isCardPlayable(card, data){
     return false;
 }
 
+function getPlayer(id, players){
+    for(const player of players){
+        if(player.Id === id){
+            return {Name: player.Name};
+        }
+    }
+    return {Name: "Unknown"};
+}
+
 
 ///////////////////////////////
 // Actions
 ///////////////////////////////
 function playCard(event) {
-    console.log(`Playing card with id: ${event.target.id} by player ${player}`);
     fetch('http://localhost:9010/play', {
         method: 'POST',
         headers: {

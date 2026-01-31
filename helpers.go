@@ -1,5 +1,9 @@
 package main
 
+import (
+	"sort"
+)
+
 func getPlayerNames() map[int]string {
 	info := make(map[int]string)
 	for _, player := range players {
@@ -24,6 +28,11 @@ func getTable() []Card {
 			table = append(table, card)
 		}
 	}
+
+	// Sort table cards by player ID
+	sort.Slice(table, func(i, j int) bool {
+		return table[i].Position < table[j].Position
+	})
 	return table
 }
 

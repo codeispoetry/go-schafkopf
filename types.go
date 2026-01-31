@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"sort"
 )
 
@@ -12,6 +11,7 @@ type Card struct {
 	Value  int
 	Player int
 	Place  string
+	Position int
 }
 
 type Player struct {
@@ -25,6 +25,7 @@ type Info struct {
 	NextPlayer    int
 	Players       []Player
 	PlayableCards []Card
+	TrickWinner   int
 }
 
 type Game struct {
@@ -81,7 +82,6 @@ func (p Player) getTrick() bool {
 
 	game.NextPlayer = p.Id
 
-	fmt.Println("Player", p.Id, "takes the trick")
 	return true
 }
 
