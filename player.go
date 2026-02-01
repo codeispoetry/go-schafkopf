@@ -54,6 +54,7 @@ func playHandler(w http.ResponseWriter, r *http.Request) {
 	
 	card.Place = "Table"
 	card.Position = len(getTable())
+	card.Playable = false
 
 
 	players[requestBody.Player].IsNext = false

@@ -74,7 +74,11 @@ function renderTable(data){
     }
     for (const card of data.Table) {
         li = document.createElement('li');
-        li.textContent = `${card.Suit} ${card.Rank}`;
+        li.setAttribute('title', `${card.Suit} ${card.Rank}`);
+        li.classList.add(`${card.Suit.toLowerCase()}`);
+        li.classList.add(`${card.Rank.toLowerCase().replace('ö', 'oe')}`);
+        li.classList.add(`player${card.Player}`);
+        li.style.zIndex = `${10 + card.Position}`;
         tableElement.appendChild(li);
     }
 

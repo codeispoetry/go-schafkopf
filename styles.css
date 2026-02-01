@@ -1,4 +1,4 @@
-#hand{
+ul.card{
     list-style-type: none;
     display: flex;
     li{
@@ -11,13 +11,7 @@
         height: 177px;
         border-radius: 15px;
         background-image: url(assets/cards.jpg);
-
-        transform-origin: bottom center;
-
-        margin-right: -70px;
     
-       
-
         &.playable{
             border-color: green;
             
@@ -78,6 +72,46 @@
         }       
     }
 
+}
+
+ul#hand li{
+    transform-origin: bottom center;
+    margin-right: -70px;
+}
+
+ul#table{
+    height: 500px;
+    width: 500px;
+    background-color: darkolivegreen;
+    border-radius: 10px;
+    position: relative;
+
+    li{
+        position: absolute;
+        transform-origin: center center; 
+        &.player0{
+            bottom: 60px;
+            left: 220px;
+            rotate: 10deg;
+        }
+        &.player1{
+            left: 130px;
+            top: 150px;
+            rotate: 100deg;
+        }
+
+        &.player2{
+            top: 60px;
+            left: 220px;
+            rotate: 170deg;
+        }
+
+        &.player3{
+            rotate: 80deg;
+            right: 130px;
+            top: 150px;
+        }
+    }
 }
 
 .your-turn{
