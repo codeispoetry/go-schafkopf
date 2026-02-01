@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"net/http"
 	"sort"
-	"fmt"
 )
 
 type Player struct {
@@ -56,7 +55,6 @@ func playHandler(w http.ResponseWriter, r *http.Request) {
 	card.Place = "Table"
 	card.Position = len(getTable())
 
-	fmt.Println(players[requestBody.Player].Name, "spielt", card.Suit, card.Rank)
 
 	players[requestBody.Player].IsNext = false
 
@@ -87,7 +85,6 @@ func (p *Player) setHasSuit(suit string) {
 	}
 	for _, card := range Deck {
 		if card.Player == p.Id && card.Place == "Hand" && card.Suit == suit && !card.Trump {
-			fmt.Println("Player", p.Name, "has suit", suit)
 			p.HasSuit = true
 			return
 		}
@@ -156,5 +153,10 @@ func isPlayable(card *Card, p *Player) bool {
 	return false
 }
 
+func (p *Player) reset() {
+	p.HasTrump = false
+	p.HasSuit = false
+	p.IsNext = false
+}
 
 

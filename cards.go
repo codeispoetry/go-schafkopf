@@ -37,3 +37,11 @@ func getCardById(cardId int) *Card {
 	return nil
 }
 
+func (c *Card) reset() {
+	c.Player = 0
+	c.Place = "Deck"
+	c.Position = -1
+	c.Playable = false
+}
+
+

@@ -141,7 +141,6 @@ function playCard(event) {
 }
 
 document.getElementById('getTrick').addEventListener('click', getTrick);
-
 function getTrick(){
      fetch('http://localhost:9010/trick', {
         method: 'POST',
@@ -151,6 +150,25 @@ function getTrick(){
         body: JSON.stringify({
             "player": player
         })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        render()
+       
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+document.getElementById('startGame').addEventListener('click', startGame);
+function startGame(){
+     fetch('http://localhost:9010/start', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({player: player})
     })
     .then(response => {
         if (!response.ok) {

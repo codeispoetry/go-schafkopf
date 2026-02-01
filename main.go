@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"encoding/json"
 )
 
 var Deck = []*Card{
@@ -52,18 +53,48 @@ var players []*Player
 
 func main() {
 	players = []*Player{
-		{Id: 0, Name: "Tom", Score: 0, IsNext: true},
+		{Id: 0, Name: "Tom", Score: 0, IsNext: false},
 		{Id: 1, Name: "Max", Score: 0, IsNext: false},
 		{Id: 2, Name: "Sibylle", Score: 0, IsNext: false},
 		{Id: 3, Name: "Birgit", Score: 0, IsNext: false},
 	}
 
-	dealCards()
-
 	http.HandleFunc("/ws", handleWSClient)
+	http.HandleFunc("/start", startHandler)
+
 	http.HandleFunc("/render", renderHandler)
 	http.HandleFunc("/play", playHandler)
 	http.HandleFunc("/trick", trickHandler)
 
 	http.ListenAndServe(":9010", nil)
+}
+
+
+func startHandler(w http.ResponseWriter, r *http.Request) {
+	if !prepareResponse(w, r, http.MethodPost) {
+		return
+	}
+
+	for _, player := range players {
+		player.reset()
+	}
+	for _, card := range Deck {
+		card.reset()
+	}
+
+	dealCards()
+
+	var requestBody struct {
+		Player int `json:"player"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&requestBody); err != nil {
+		http.Error(w, "Invalid JSON", http.StatusBadRequest)
+		return
+	}
+
+	players[requestBody.Player].IsNext = true	
+
+	w.WriteHeader(http.StatusOK)
+	pingAllClients()
 }
