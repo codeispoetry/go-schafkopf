@@ -56,7 +56,6 @@ func playHandler(w http.ResponseWriter, r *http.Request) {
 	card.Place = "Table"
 	card.Position = len(getTable())
 
-
 	fmt.Println(players[requestBody.Player].Name, "spielt", card.Suit, card.Rank)
 
 	players[requestBody.Player].IsNext = false
@@ -71,12 +70,36 @@ func playHandler(w http.ResponseWriter, r *http.Request) {
 	pingAllClients()
 }
 
+func (p *Player) setHasTrump() {
+	for _, card := range Deck {
+		if card.Player == p.Id && card.Place == "Hand" && card.Trump {
+			p.HasTrump = true
+			return
+		}
+	}
+	p.HasTrump = false
+}
+
+func (p *Player) setHasSuit(suit string) {
+	if getTable()[0].Trump {
+		p.HasSuit = false
+		return
+	}
+	for _, card := range Deck {
+		if card.Player == p.Id && card.Place == "Hand" && card.Suit == suit && !card.Trump {
+			fmt.Println("Player", p.Name, "has suit", suit)
+			p.HasSuit = true
+			return
+		}
+	}
+	p.HasSuit = false
+}
+
 func (p *Player) Hand() []*Card {
-	
 	var hand []*Card
 	for i := range Deck {
 		if Deck[i].Player == p.Id && Deck[i].Place == "Hand" {
-			Deck[i].Playable = true
+			Deck[i].Playable = p.IsNext && isPlayable(Deck[i], p)
 			hand = append(hand, Deck[i])
 		}
 	}
@@ -109,12 +132,29 @@ func (p *Player) getTrick()  {
 
 }
 
-func getPlayerNames() map[int]string {
-	info := make(map[int]string)
-	for _, player := range players {
-		info[player.Id] = player.Name
+func isPlayable(card *Card, p *Player) bool {
+	if(len(getTable()) == 0) {
+		return true
 	}
-	return info
+
+	leadCard := getTable()[0]
+	
+	if leadCard.Trump {
+		if( p.HasTrump && card.Trump ) || (!p.HasTrump) {
+			return true
+		}
+	}
+
+	if !leadCard.Trump {
+		if( p.HasSuit && card.Suit == leadCard.Suit && !card.Trump) || (!p.HasSuit) {
+			return true
+		}
+	}
+
+	
+	
+	return false
 }
+
 
 

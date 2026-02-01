@@ -28,12 +28,12 @@ var Deck = []*Card{
 	{Id: 16, Suit: "Herz", Rank: "Ober", Value: 3, Trump: true, Player: 0, Place: "Deck", FightOrder: 31, SortOrder: 71},
 	{Id: 17, Suit: "Herz", Rank: "Unter", Value: 2, Trump: true, Player: 0, Place: "Deck", FightOrder: 21, SortOrder: 61},
 
-	{Id: 19, Suit: "Herz", Rank: "As", Value: 11, Trump: false, Player: 0, Place: "Deck", FightOrder: 16, SortOrder: 55},
-	{Id: 20, Suit: "Herz", Rank: "10", Value: 10, Trump: false, Player: 0, Place: "Deck", FightOrder: 15, SortOrder: 54},
-	{Id: 18, Suit: "Herz", Rank: "König", Value: 4, Trump: false, Player: 0, Place: "Deck", FightOrder: 14, SortOrder: 53},
-	{Id: 21, Suit: "Herz", Rank: "9", Value: 0, Trump: false, Player: 0, Place: "Deck", FightOrder: 13, SortOrder: 52},
-	{Id: 22, Suit: "Herz", Rank: "8", Value: 0, Trump: false, Player: 0, Place: "Deck", FightOrder: 12, SortOrder: 51},
-	{Id: 23, Suit: "Herz", Rank: "7", Value: 0, Trump: false, Player: 0, Place: "Deck", FightOrder: 11, SortOrder: 50},
+	{Id: 19, Suit: "Herz", Rank: "As", Value: 11, Trump: true, Player: 0, Place: "Deck", FightOrder: 16, SortOrder: 55},
+	{Id: 20, Suit: "Herz", Rank: "10", Value: 10, Trump: true, Player: 0, Place: "Deck", FightOrder: 15, SortOrder: 54},
+	{Id: 18, Suit: "Herz", Rank: "König", Value: 4, Trump: true, Player: 0, Place: "Deck", FightOrder: 14, SortOrder: 53},
+	{Id: 21, Suit: "Herz", Rank: "9", Value: 0, Trump: true, Player: 0, Place: "Deck", FightOrder: 13, SortOrder: 52},
+	{Id: 22, Suit: "Herz", Rank: "8", Value: 0, Trump: true, Player: 0, Place: "Deck", FightOrder: 12, SortOrder: 51},
+	{Id: 23, Suit: "Herz", Rank: "7", Value: 0, Trump: true, Player: 0, Place: "Deck", FightOrder: 11, SortOrder: 50},
 
 
 	{Id: 24, Suit: "Schellen", Rank: "Ober", Value: 3, Trump: true, Player: 0, Place: "Deck", FightOrder: 30, SortOrder: 70},
@@ -66,6 +66,4 @@ func main() {
 	http.HandleFunc("/trick", trickHandler)
 
 	http.ListenAndServe(":9010", nil)
-
-
 }

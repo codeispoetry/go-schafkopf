@@ -10,9 +10,9 @@ type Info struct {
 	Hand          []*Card
 	Table         []Card
 	NextPlayer    int
-	Players       []*Player
 	TrickWinner   int
-	Scores        map[int]int
+	Players       []*Player
+
 }
 
 func renderHandler(w http.ResponseWriter, r *http.Request) {
@@ -29,13 +29,18 @@ func renderHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if(len(getTable())) == 1 {
+		players[requestBody.Player].setHasTrump()
+		players[requestBody.Player].setHasSuit(getTable()[0].Suit)
+	}
 	
 	Info := Info{
 		Hand:          players[requestBody.Player].Hand(),
 		Table:         getTable(),
 		NextPlayer:    getNextPlayer(),
-		Players:       players,
 		TrickWinner:   getTrickWinner(),
+		Players:       players,
+
 	}
 
 	json.NewEncoder(w).Encode(Info)
