@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"net/http"
+	"sort"
 )
 
 type Info struct {
@@ -28,18 +29,53 @@ func renderHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if len(getTable()) == 4 {
-		game.NextPlayer = -1
-	}
-
+	
 	Info := Info{
 		Hand:          players[requestBody.Player].Hand(),
 		Table:         getTable(),
-		NextPlayer:    game.NextPlayer,
+		NextPlayer:    getNextPlayer(),
 		Players:       players,
-		TrickWinner:   whoWonTrick(),
+		TrickWinner:   getTrickWinner(),
 	}
 
 	json.NewEncoder(w).Encode(Info)
 }
 
+func getTable() []Card {
+	var table []Card
+	for _, card := range Deck {
+		if card.Place == "Table" {
+			table = append(table, *card)
+		}
+	}
+
+	// Sort table cards by player ID
+	sort.Slice(table, func(i, j int) bool {
+		return table[i].Position < table[j].Position
+	})
+	return table
+}
+
+func getNextPlayer() int {
+	for _, player := range players {
+		if player.IsNext {
+			return player.Id
+		}
+	}
+	return -1
+}
+
+func getTrickWinner() int {
+	if(len(getTable()) < 4) {
+		return -1
+	}
+	
+	leadCard := getTable()[0]
+	winnerCard := leadCard
+	for _, card := range getTable()[1:] {
+		if(card.Trump && !winnerCard.Trump) || (card.Trump == winnerCard.Trump && card.FightOrder > winnerCard.FightOrder) {
+			winnerCard = card
+		}
+	}
+	return 	winnerCard.Player
+}

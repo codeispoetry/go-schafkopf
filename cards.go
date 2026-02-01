@@ -1,5 +1,9 @@
 package main
 
+import (
+	"math/rand"
+)
+
 type Card struct {
 	Id         int
 	Suit       string // e.g., "Eichel", "Gras", "Herz", "Schellen"
@@ -11,51 +15,25 @@ type Card struct {
 	Place      string // "Deck", "Hand", "Table", "Trick"
 	Position   int    // position on the table when played
 	Playable   bool   // whether the card is currently playable
+	Trump 	   bool   // whether the card is a trump card
 }
 
 
-func (c Card) isTrump() bool {
-	return c.Suit == game.TrumpSuit || c.Rank == "Ober" || c.Rank == "Unter"
-}
+func dealCards() {
+	rand.Shuffle(len(Deck), func(i, j int) { Deck[i], Deck[j] = Deck[j], Deck[i] })
 
-func (c Card) isPlayable() bool {
-	tableCards := getTable()
-	if len(tableCards) == 0 {
-		return true // I am the lead player and can play any card
+	for i,_ := range Deck {
+		Deck[i].Player = i%4
+		Deck[i].Place = "Hand"
 	}
-	
-	leadCard := tableCards[0]
-	
-	if( leadCard.isTrump() ) {
-		if( !players[game.NextPlayer].HasTrump ) {
-			return true
-		} else{
-			if( c.isTrump() ) {
-				return true
-			}
-		}
-	}else{
-		leadSuit := leadCard.Suit
-		
-		if( !players[game.NextPlayer].HasSuit ) {
-			return true
-		}else{
-			if( c.Suit == leadSuit && !c.isTrump() ) {
-				return true
-			}
-		}
-	}
-	
-		
-	return false;
 }
 
-
-func getCardById(id int) *Card {
-	for i := range Deck {
-		if Deck[i].Id == id {
-			return &Deck[i]
+func getCardById(cardId int) *Card {
+	for _, card := range Deck {
+		if card.Id == cardId {
+			return card
 		}
 	}
 	return nil
 }
+
