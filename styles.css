@@ -1,23 +1,79 @@
 #hand{
+    list-style-type: none;
+    display: flex;
     li{
         cursor: pointer;
-        border: 1px solid black;
-        border-radius: 8px;
         padding: 4px;
         margin: 2px;
-        width: 140px;
+        border: 1px solid white;
 
+        width: 100px;
+        height: 177px;
+        border-radius: 15px;
+        background-image: url(assets/cards.jpg);
+
+        transform-origin: bottom center;
+
+        margin-right: -70px;
+    
         &:hover{
-            background-color: #f0f0f0;
+            transform: translateY(-5px) !important;
+            z-index: 10;
         }
 
         &.playable{
-            border: 2px solid green;
-            font-weight: bold; 
-            background-color: #e0ffe0;
+            border-color: green;
         }
-        
+
+        &.eichel{
+            background-position-y: -11px;
+        }
+
+        &.gras{
+            background-position-y: -200px;
+        }
+
+        &.herz{
+            background-position-y: -392px;
+        }
+
+        &.schellen{
+            background-position-y: -584px;
+        }
+
+        &.ober{
+            background-position-x: -363px;
+        }
+
+        &.unter{
+            background-position-x: -481px;
+        }
+
+        &.sieben{
+            background-position-x: -833px;
+        }
+
+        &.acht{
+            background-position-x: -715px;
+        }
+
+        &.neun{
+            background-position-x: -598px;
+        }
+
+        &.zehn{
+            background-position-x: -129px;
+        }
+
+        &.koenig{
+            background-position-x: -246px;
+        }
+
+        &.ass{
+            background-position-x: -11px;
+        }       
     }
+
 }
 
 .your-turn{
@@ -25,3 +81,4 @@
     padding: 4px;
     background-color: green;
 }
+

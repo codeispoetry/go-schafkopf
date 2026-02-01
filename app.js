@@ -91,15 +91,24 @@ function renderPlayer(data){
     }
     const handElement = document.getElementById('hand');
     handElement.innerHTML = '';
+    let i = 0;
     for (const card of data.Hand) {
         li = document.createElement('li');
-        li.textContent = `${card.Suit} ${card.Rank}`;
+        li.setAttribute('title', `${card.Suit} ${card.Rank}`);
         li.id = `${card.Id}`;
+        li.classList.add(`${card.Suit.toLowerCase()}`);
+        li.classList.add(`${card.Rank.toLowerCase().replace('ö', 'oe')}`);
+
+        const rotation = i * 5 - (data.Hand.length -1 ) * 5 /2;
+        li.style.transform = `rotate(${rotation}deg) translateY(${Math.abs(rotation)*2}px)`;
+
+
         if(card.Playable){
             li.classList.add('playable');
             li.addEventListener('click', playCard);
         }
         handElement.appendChild(li);
+        i++;
     }
 }
 
