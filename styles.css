@@ -16,13 +16,17 @@
 
         margin-right: -70px;
     
-        &:hover{
-            transform: translateY(-5px) !important;
-            z-index: 10;
-        }
+       
 
         &.playable{
             border-color: green;
+            
+            &:hover{
+                transition: ease-in-out 0.2s;
+                transform: translateY(-10px) !important;
+                zoom: 1.07;
+                z-index: 10;
+            }
         }
 
         &.eichel{

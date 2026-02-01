@@ -100,7 +100,8 @@ function renderPlayer(data){
         li.classList.add(`${card.Rank.toLowerCase().replace('ö', 'oe')}`);
 
         const rotation = i * 5 - (data.Hand.length -1 ) * 5 /2;
-        li.style.transform = `rotate(${rotation}deg) translateY(${Math.abs(rotation)*2}px)`;
+        li.style.transform = `translateY(${Math.abs(rotation)*2}px)`;
+        li.style.rotate = `${rotation}deg`;
 
 
         if(card.Playable){
