@@ -4,8 +4,6 @@ import (
 	"net/http"
 )
 
-
-
 func prepareResponse(w http.ResponseWriter, r *http.Request, method string) bool{
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")

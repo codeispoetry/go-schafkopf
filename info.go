@@ -40,7 +40,6 @@ func renderHandler(w http.ResponseWriter, r *http.Request) {
 		NextPlayer:    getNextPlayer(),
 		TrickWinner:   getTrickWinner(),
 		Players:       players,
-
 	}
 
 	json.NewEncoder(w).Encode(Info)
