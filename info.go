@@ -2,9 +2,10 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"sort"
-	"fmt"
+	"strings"
 )
 
 type Info struct {
@@ -12,7 +13,7 @@ type Info struct {
 	Table         []Card
 	NextPlayer    int
 	TrickWinner   int
-	IsFinished	  bool
+	IsFinished    bool
 	IsGameDefined bool
 	Players       []*Player
 	Scores        []int
@@ -20,7 +21,7 @@ type Info struct {
 }
 
 func renderHandler(w http.ResponseWriter, r *http.Request) {
-	if (!prepareResponse(w, r, http.MethodPost)) {
+	if !prepareResponse(w, r, http.MethodPost) {
 		return
 	}
 
@@ -35,10 +36,10 @@ func renderHandler(w http.ResponseWriter, r *http.Request) {
 
 	Hand := players[requestBody.Player].Hand()
 
-	if(requestBody.Player == getNextPlayer()) {
+	if requestBody.Player == getNextPlayer() {
 		Hand = setPlayableCards(Hand)
 	}
-	
+
 	Info := Info{
 		Hand:          Hand,
 		Table:         getTable(),
@@ -48,39 +49,34 @@ func renderHandler(w http.ResponseWriter, r *http.Request) {
 		IsGameDefined: isGameDefined(),
 		Players:       players,
 		Scores:        calculateScores(),
-		FinishLine: 	getFinishLine(),
+		FinishLine:    getFinishLine(),
 	}
 
 	json.NewEncoder(w).Encode(Info)
 }
 
 func getFinishLine() string {
-	if(!isFinished() || !isGameDefined()) {
+	if !isFinished() || !isGameDefined() {
 		return ""
 	}
 
-	gamers := ""
+	gamers := []string{}
 	gamersScore := 0
 
 	for _, player := range players {
 		if player.Gamer {
-			gamers += player.Name + " und "
+			gamers = append(gamers, player.Name)
 			gamersScore += player.Points
 		}
 	}
 
-	gamers = gamers[:len(gamers)-5] // remove last "und"
-	wonOrLost := "verloren"
+	wonOrLost := map[bool]string{true: "gewonnen", false: "verloren"}[gamersScore >= 61]
+	verb := map[bool]string{true: "haben", false: "hat"}[len(gamers) > 1]
 
-	
-	if gamersScore >= 61 {
-		wonOrLost = "gewonnen"
-	}
-
-	return fmt.Sprintf("%s hat %d Punkte und somit %s!", gamers, gamersScore, wonOrLost)
+	return fmt.Sprintf("%s %s mit %d Punkten %s.", strings.Join(gamers, " und "), verb, gamersScore, wonOrLost)
 }
 
-func calculateScores() []int{
+func calculateScores() []int {
 	if !isFinished() || !isGameDefined() {
 		return []int{0, 0}
 	}
@@ -152,7 +148,7 @@ func setPlayableCards(hand []*Card) []*Card {
 			}
 			return hand
 		}
-	}else{
+	} else {
 		// Lead card is non-trump, player must follow suit if possible
 		leadSuit := leadCard.Suit
 		hasSuit := false
@@ -171,8 +167,6 @@ func setPlayableCards(hand []*Card) []*Card {
 			return hand
 		}
 	}
-
-
 
 	// If code comes here, no playable card found, so all are playable
 	for _, card := range hand {
@@ -197,7 +191,7 @@ func getTable() []Card {
 }
 
 func getNextPlayer() int {
-	if(isFinished()) {
+	if isFinished() {
 		return 0 // handle to the next toDo
 	}
 
@@ -210,18 +204,18 @@ func getNextPlayer() int {
 }
 
 func getTrickWinner() int {
-	if(len(getTable()) < 4) {
+	if len(getTable()) < 4 {
 		return -1
 	}
-	
+
 	leadCard := getTable()[0]
 	winnerCard := leadCard
 	for _, card := range getTable()[1:] {
-		if(card.Trump && !winnerCard.Trump) || (card.Trump == winnerCard.Trump && card.FightOrder > winnerCard.FightOrder) {
+		if (card.Trump && !winnerCard.Trump) || (card.Trump == winnerCard.Trump && card.FightOrder > winnerCard.FightOrder) {
 			winnerCard = card
 		}
 	}
-	return 	winnerCard.Player
+	return winnerCard.Player
 }
 
 func isGameDefined() bool {

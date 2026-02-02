@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
+	"os"
 
 	"github.com/gorilla/websocket"
 )
@@ -17,10 +19,16 @@ func main() {
 	startWithPlayer := 0 
 	waitMillis := 0
 
-	
-	startWithPlayer = 1 
-	waitMillis = 1000
-	
+	if len(os.Args) > 1 {
+		if val, err := strconv.Atoi(os.Args[1]); err == nil {
+			startWithPlayer = val
+		}
+	}
+	if len(os.Args) > 2 {
+		if val, err := strconv.Atoi(os.Args[2]); err == nil {
+			waitMillis = val
+		}
+	}
 
 	// Connect to websocket
 	wsURL := "ws://localhost:9010/ws"
