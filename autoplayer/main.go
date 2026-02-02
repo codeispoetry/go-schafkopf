@@ -33,7 +33,7 @@ func main() {
 
 		for i := 1; i <= 3; i++ {
 			fmt.Printf("Player %d's turn\n", i)
-			time.Sleep(1 * time.Second)
+			time.Sleep(500 * time.Millisecond)
 			cardToPlay, trickWinner := getInfo(i)
 			if cardToPlay != -1 {
 				play(i, cardToPlay)

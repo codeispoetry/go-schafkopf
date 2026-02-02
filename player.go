@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"sort"
 )
@@ -72,6 +73,7 @@ func playHandler(w http.ResponseWriter, r *http.Request) {
 func (p *Player) setHasTrump() {
 	for _, card := range Deck {
 		if card.Player == p.Id && card.Place == "Hand" && card.Trump {
+			fmt.Println("Player ", p.Id, "has trump card:", card.Suit, card.Rank)
 			p.HasTrump = true
 			return
 		}
@@ -86,6 +88,7 @@ func (p *Player) setHasSuit(suit string) {
 	}
 	for _, card := range Deck {
 		if card.Player == p.Id && card.Place == "Hand" && card.Suit == suit && !card.Trump {
+			fmt.Println("Player ", p.Id, "has suit:", card.Suit, card.Rank, suit)
 			p.HasSuit = true
 			return
 		}

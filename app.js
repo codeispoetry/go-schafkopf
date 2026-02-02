@@ -67,11 +67,20 @@ function renderStatus(data) {
 }
 
 function renderTable(data){
-    const tableElement = document.getElementById('table');
-    tableElement.innerHTML = '';
+    const deckElement = document.getElementById('deck');
+    const feltElement = document.getElementById('felt');
+
+    feltElement.className = '';
+
+    deckElement.innerHTML = '';
     if(data.Table === null) {
         return;
     }
+
+    if(data.TrickWinner >= 0){
+        feltElement.classList.add(`player${data.TrickWinner}`);
+    }
+
     for (const card of data.Table) {
         li = document.createElement('li');
         li.setAttribute('title', `${card.Suit} ${card.Rank}`);
@@ -79,22 +88,18 @@ function renderTable(data){
         li.classList.add(`${card.Rank.toLowerCase().replace('ö', 'oe')}`);
         li.classList.add(`player${card.Player}`);
         li.style.zIndex = `${10 + card.Position}`;
-        tableElement.appendChild(li);
-    }
-
-    if(data.Table !== null && data.Table.length === 4){
-        document.getElementById('getTrick').removeAttribute('disabled');
-    } else {
-        document.getElementById('getTrick').setAttribute('disabled', 'true');   
+        deckElement.appendChild(li);
     }
 }
 
 function renderPlayer(data){
+    const handElement = document.getElementById('hand');
+    handElement.innerHTML = '';
+    
     if( data.Hand === null ){
         return;
     }
-    const handElement = document.getElementById('hand');
-    handElement.innerHTML = '';
+
     let i = 0;
     for (const card of data.Hand) {
         li = document.createElement('li');

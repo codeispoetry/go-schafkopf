@@ -79,37 +79,60 @@ ul#hand li{
     margin-right: -70px;
 }
 
-ul#table{
+div#felt{
     height: 500px;
     width: 500px;
     background-color: darkolivegreen;
     border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: relative;
 
-    li{
+    &.player0{
+        align-items: flex-end;
+        justify-content: center;
+    }
+    &.player1{
+        align-items: center;
+        justify-content: flex-start;
+    }
+    &.player2{
+        align-items: flex-start;
+        justify-content: center;
+    }
+    &.player3{
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+
+    ul#deck{
+        width: 270px;
+        height: 280px;
         position: absolute;
-        transform-origin: center center; 
-        &.player0{
-            bottom: 60px;
-            left: 220px;
-            rotate: 10deg;
-        }
-        &.player1{
-            left: 130px;
-            top: 150px;
-            rotate: 100deg;
-        }
+        margin: 0;
 
-        &.player2{
-            top: 60px;
-            left: 220px;
-            rotate: 170deg;
-        }
+        li{
+            transform-origin: center center; 
+            position: absolute;
+            top: 0;
+            left: 0px;
 
-        &.player3{
-            rotate: 80deg;
-            right: 130px;
-            top: 150px;
+            &.player0{
+               transform: translate(100px, 70px) rotate(10deg);
+            }
+            &.player1{
+                transform: translate(50px, 40px) rotate(80deg);
+            }
+
+            &.player2{
+                transform: translate(100px, 10px) rotate(-10deg);
+            }
+
+            &.player3{
+                transform: translate(150px, 40px) rotate(100deg);
+            }
         }
     }
 }
