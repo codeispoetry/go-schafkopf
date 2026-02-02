@@ -23,3 +23,4 @@ func prepareResponse(w http.ResponseWriter, r *http.Request, method string) bool
 
 	return true
 }
+

@@ -3,6 +3,8 @@ package main
 import (
 	"net/http"
 	"encoding/json"
+	"log"
+	"os"
 )
 
 var Deck = []*Card{
@@ -52,6 +54,12 @@ var players []*Player
 
 
 func main() {
+
+	log.SetFlags(0)
+
+	file, _ := os.Create("app.log")
+	log.SetOutput(file)
+	
 	players = []*Player{
 		{Id: 0, Name: "Tom", Score: 0, IsNext: false},
 		{Id: 1, Name: "Max", Score: 0, IsNext: false},

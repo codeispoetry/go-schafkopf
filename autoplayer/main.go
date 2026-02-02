@@ -31,17 +31,26 @@ func main() {
 		}
 		fmt.Println(string(message))
 
-		for i := 1; i <= 3; i++ {
-			fmt.Printf("Player %d's turn\n", i)
-			time.Sleep(500 * time.Millisecond)
-			cardToPlay, trickWinner := getInfo(i)
+		for i := 0; i <= 3; i++ {
+
+			cardToPlay, trickWinner, nextPlayer := getInfo(i)
+
+			fmt.Println(cardToPlay, trickWinner, nextPlayer)
+			if(trickWinner != -1) {
+				takeTrick(trickWinner)
+				continue
+			}
+
+			if(nextPlayer != i || nextPlayer == -1) {
+				continue
+			}
+
+			fmt.Printf("Playing for %d\n", i)
+			time.Sleep(10 * time.Millisecond)
 			if cardToPlay != -1 {
 				play(i, cardToPlay)
 			}
 
-			if trickWinner > 0 {
-				takeTrick(trickWinner)
-			}
 		}
 	}
 }
@@ -62,12 +71,9 @@ func play(player int, cardId int) {
 		return
 	}
 	defer resp.Body.Close()
-	fmt.Printf("Player %d played %d, \n", player, cardId)
 }
 
 func takeTrick(player int) {
-	
-
 	payload := map[string]int{"player": player}
 	jsonData, _ := json.Marshal(payload)
 
@@ -81,7 +87,7 @@ func takeTrick(player int) {
 	fmt.Printf("Player %d took the trick\n", player)
 }
 
-func getInfo(player int) (int, int) {
+func getInfo(player int) (int, int, int) {
 	payload := map[string]int{"player": player}
 	jsonData, _ := json.Marshal(payload)
 
@@ -89,14 +95,14 @@ func getInfo(player int) (int, int) {
 	resp, err := http.Post(url+route, "application/json", bytes.NewBuffer(jsonData))
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
-		return -1, -1
+		return -1, -1,-1
 	}
 	defer resp.Body.Close()
 
 	var responseData map[string]interface{}
 	if err := json.NewDecoder(resp.Body).Decode(&responseData); err != nil {
 		fmt.Printf("JSON decode error: %v\n", err)
-		return -1, -1
+		return -1, -1,-1
 	}
 
 	cardToPlay := -1
@@ -121,6 +127,6 @@ func getInfo(player int) (int, int) {
 		trickWinner = int(tw)
 	}
 
-	return cardToPlay, trickWinner
+	return cardToPlay, trickWinner, int(responseData["NextPlayer"].(float64))
 
 }
