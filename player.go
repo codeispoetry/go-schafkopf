@@ -10,9 +10,8 @@ import (
 type Player struct {
 	Id       int
 	Name     string
-	Score    int
-	HasTrump bool
-	HasSuit  bool
+	Points    int
+	Tricks   int
 	IsNext   bool
 }
 
@@ -70,35 +69,13 @@ func playHandler(w http.ResponseWriter, r *http.Request) {
 	pingAllClients()
 }
 
-func (p *Player) setHasTrump() {
-	for _, card := range Deck {
-		if card.Player == p.Id && card.Place == "Hand" && card.Trump {
-			p.HasTrump = true
-			return
-		}
-	}
-	p.HasTrump = false
-}
 
-func (p *Player) setHasSuit(suit string) {
-	if getTable()[0].Trump {
-		p.HasSuit = false
-		return
-	}
-	for _, card := range Deck {
-		if card.Player == p.Id && card.Place == "Hand" && card.Suit == suit && !card.Trump {
-			p.HasSuit = true
-			return
-		}
-	}
-	p.HasSuit = false
-}
 
 func (p *Player) Hand() []*Card {
 	var hand []*Card
 	for i := range Deck {
 		if Deck[i].Player == p.Id && Deck[i].Place == "Hand" {
-			Deck[i].Playable = p.IsNext && isPlayable(Deck[i], p)
+			Deck[i].Playable = false
 			hand = append(hand, Deck[i])
 		}
 	}
@@ -124,41 +101,16 @@ func (p *Player) getTrick()  {
 		card.Playable = false
 		card.Player = p.Id
 
-		p.Score += card.Value
+		p.Points += card.Value
 	}
-
+	
+	p.Tricks++
 	p.IsNext = true
-
-}
-
-func isPlayable(card *Card, p *Player) bool {
-	if(len(getTable()) == 0) {
-		return true
-	}
-
-	leadCard := getTable()[0]
-	
-	if leadCard.Trump {
-		if( p.HasTrump && card.Trump ) || (!p.HasTrump) {
-			return true
-		}
-	}
-
-	if !leadCard.Trump {
-		if( p.HasSuit && card.Suit == leadCard.Suit && !card.Trump) || (!p.HasSuit) {
-			return true
-		}
-	}
-
-	
-	
-	return false
 }
 
 func (p *Player) reset() {
-	p.HasTrump = false
-	p.HasSuit = false
 	p.IsNext = false
+	p.Points = 0
+	p.Tricks = 0
 }
-
 

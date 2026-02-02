@@ -1,3 +1,7 @@
+body.your-turn {
+    background-color: darkgreen;
+}
+
 ul.card{
     list-style-type: none;
     display: flex;

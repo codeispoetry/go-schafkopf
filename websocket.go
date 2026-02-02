@@ -35,7 +35,7 @@ func handleWSClient(w http.ResponseWriter, r *http.Request) {
 	defer delete(clients, ws)
 
 	// Send initial message
-	if err := sendMessage(ws, "Hallo"); err != nil {
+	if err := sendMessage(ws, "Hello"); err != nil {
 		log.Println("write error:", err)
 		return
 	}

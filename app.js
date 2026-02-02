@@ -30,6 +30,10 @@ function render(){
     })
     .then(response => response.json())
     .then(data => {
+
+        if(data.IsFinished){
+            renderFinished(data);
+        }
         renderPlayer(data);
         renderTable(data);
         renderStatus(data);
@@ -42,19 +46,26 @@ function render(){
     
 }
 
+function renderFinished(data){
+    const status = document.querySelector('#status');
+    status.innerHTML = '';
+
+    for(const player of data.Players){
+        status.innerHTML += `<br/>${player.Name}: ${player.Points} points, ${player.Tricks} tricks`;
+    }
+}
+
 function renderStatus(data) {
     const playerInfoElement = document.getElementById('playerInfo');
     const currentPlayer = getPlayer(player, data.Players);
     playerInfoElement.innerHTML = `${currentPlayer.Name}`;
+    const body = document.querySelector('body');
 
     
 
-    const statusElement = document.getElementById('status');
-    statusElement.classList.remove('your-turn');
-    statusElement.innerHTML = '';
+    body.classList.remove('your-turn');
     if(data.NextPlayer === player) {
-        statusElement.innerHTML = `Your Turn!`;
-        statusElement.classList.add('your-turn');
+        body.classList.add('your-turn');
     }
 
     document.getElementById('getTrick').style.display = 'none';

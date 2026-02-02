@@ -61,10 +61,10 @@ func main() {
 	log.SetOutput(file)
 	
 	players = []*Player{
-		{Id: 0, Name: "Tom", Score: 0, IsNext: false},
-		{Id: 1, Name: "Max", Score: 0, IsNext: false},
-		{Id: 2, Name: "Sibylle", Score: 0, IsNext: false},
-		{Id: 3, Name: "Birgit", Score: 0, IsNext: false},
+		{Id: 0, Name: "Tom", Points: 0, IsNext: false},
+		{Id: 1, Name: "Max", Points: 0, IsNext: false},
+		{Id: 2, Name: "Sibylle", Points: 0, IsNext: false},
+		{Id: 3, Name: "Birgit", Points: 0, IsNext: false},
 	}
 
 	http.HandleFunc("/ws", handleWSClient)

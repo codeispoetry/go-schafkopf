@@ -11,6 +11,7 @@ type Info struct {
 	Table         []Card
 	NextPlayer    int
 	TrickWinner   int
+	IsFinished	  bool
 	Players       []*Player
 
 }
@@ -29,20 +30,87 @@ func renderHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if(len(getTable())) == 1 {
-		players[requestBody.Player].setHasTrump()
-		players[requestBody.Player].setHasSuit(getTable()[0].Suit)
-	}
+	Hand := setPlayableCards(players[requestBody.Player].Hand())	
 	
 	Info := Info{
-		Hand:          players[requestBody.Player].Hand(),
+		Hand:          Hand,
 		Table:         getTable(),
 		NextPlayer:    getNextPlayer(),
 		TrickWinner:   getTrickWinner(),
+		IsFinished:    isFinished(),
 		Players:       players,
 	}
 
 	json.NewEncoder(w).Encode(Info)
+}
+
+func isFinished() bool {
+	playedCards := 0
+	for _, card := range Deck {
+		if card.Place == "Trick" {
+			playedCards++
+		}
+	}
+
+	return playedCards == len(Deck)
+}
+
+func setPlayableCards(hand []*Card) []*Card {
+	table := getTable()
+
+	// If no cards on table, all cards are playable
+	if len(table) == 0 {
+		for _, card := range hand {
+			card.Playable = true
+		}
+		return hand
+	}
+
+	leadCard := table[0]
+	if leadCard.Trump {
+		// Lead card is trump, player must play trump if possible
+		hasTrump := false
+		for _, card := range hand {
+			if card.Trump {
+				hasTrump = true
+				break
+			}
+		}
+		if hasTrump {
+			for _, card := range hand {
+				if card.Trump {
+					card.Playable = true
+				}
+			}
+			return hand
+		}
+	}else{
+		// Lead card is non-trump, player must follow suit if possible
+		leadSuit := leadCard.Suit
+		hasSuit := false
+		for _, card := range hand {
+			if !card.Trump && card.Suit == leadSuit {
+				hasSuit = true
+				break
+			}
+		}
+		if hasSuit {
+			for _, card := range hand {
+				if !card.Trump && card.Suit == leadSuit {
+					card.Playable = true
+				}
+			}
+			return hand
+		}
+	}
+
+
+
+	// If code comes here, no playable card found, so all are playable
+	for _, card := range hand {
+		card.Playable = true
+	}
+	return hand
 }
 
 func getTable() []Card {

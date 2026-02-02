@@ -18,6 +18,7 @@ func main() {
 	wsURL := "ws://localhost:9010/ws"
 	conn, _, err := websocket.DefaultDialer.Dial(wsURL, nil)
 	if err != nil {
+		fmt.Println("No server:", err)
 		return
 	}
 	defer conn.Close()
@@ -35,7 +36,6 @@ func main() {
 
 			cardToPlay, trickWinner, nextPlayer := getInfo(i)
 
-			fmt.Println(cardToPlay, trickWinner, nextPlayer)
 			if(trickWinner != -1) {
 				takeTrick(trickWinner)
 				continue
@@ -45,7 +45,6 @@ func main() {
 				continue
 			}
 
-			fmt.Printf("Playing for %d\n", i)
 			time.Sleep(10 * time.Millisecond)
 			if cardToPlay != -1 {
 				play(i, cardToPlay)
@@ -57,7 +56,6 @@ func main() {
 
 func play(player int, cardId int) {
 	if cardId == -1 {
-		fmt.Println("No playable card found")
 		return
 	}
 
@@ -84,7 +82,6 @@ func takeTrick(player int) {
 		return
 	}
 	defer resp.Body.Close()
-	fmt.Printf("Player %d took the trick\n", player)
 }
 
 func getInfo(player int) (int, int, int) {
