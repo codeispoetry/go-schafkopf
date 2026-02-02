@@ -10,10 +10,17 @@
 <body>        
     <div id="playerInfo"></div>
     <div id="status"></div>
-    <div id="felt"><ul id="deck" class="card"></ul></div>
+    <div id="felt"><ul id="trick" class="card"></ul></div>
     <ul id="hand" class="card"></ul>
-    <button id="getTrick">Get Trick</button>   
-    <button id="startGame">Start Game</button>   
+
+    <button id="startGame">Mische und verteile</button>  
+
+    <div id="declare_buttons">
+        <button data-game="call-eichel">Rufe Eichel</button>
+        <button data-game="call-gras">Rufe Gras</button>
+        <button data-game="call-schellen">Rufe Schellen</button>
+    </div>
+        
     <script src="app.js"></script>    
 </body>
 </html>

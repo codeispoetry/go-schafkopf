@@ -9,10 +9,36 @@ import (
 
 type Player struct {
 	Id       int
-	Name     string
-	Points    int
-	Tricks   int
+	Name     string // player's name
+	Points    int // points in this round
+	Tricks   int // number of tricks won
 	IsNext   bool
+	Gamer    bool // is gamer or non-gamer
+}
+
+func defineHandler(w http.ResponseWriter, r *http.Request) {
+	if !prepareResponse(w, r, http.MethodPost) {
+		return
+	}
+
+	var requestBody struct {
+		Player int `json:"player"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&requestBody); err != nil {
+		http.Error(w, "Invalid JSON", http.StatusBadRequest)
+		return
+	}
+
+	for _, player := range players {
+		player.Gamer = false
+	}
+	players[requestBody.Player].Gamer = true
+	players[2].Gamer = true
+
+	
+	w.WriteHeader(http.StatusOK)
+	pingAllClients()
 }
 
 func trickHandler(w http.ResponseWriter, r *http.Request) {
@@ -57,19 +83,20 @@ func playHandler(w http.ResponseWriter, r *http.Request) {
 	card.Playable = false
 
 
-	players[requestBody.Player].IsNext = false
-
-	if(len(getTable()) < 4) {
-		playerId := (requestBody.Player + 1) % len(players)
-		players[playerId].IsNext = true
-	}
+	players[requestBody.Player].passOnToTheNext()
 
 	log.Printf("Player %d played card %d", requestBody.Player, requestBody.Card)
 	w.WriteHeader(http.StatusOK)
 	pingAllClients()
 }
 
-
+func (p *Player) passOnToTheNext() {
+	p.IsNext = false;
+	if(len(getTable()) < 4) {
+		playerId := (p.Id + 1) % len(players)
+		players[playerId].IsNext = true
+	}
+}
 
 func (p *Player) Hand() []*Card {
 	var hand []*Card
@@ -108,9 +135,11 @@ func (p *Player) getTrick()  {
 	p.IsNext = true
 }
 
+
 func (p *Player) reset() {
 	p.IsNext = false
 	p.Points = 0
 	p.Tricks = 0
+	p.Gamer = false
 }
 

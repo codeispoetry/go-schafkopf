@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"log"
 	"os"
+	"math/rand"
 )
 
 var Deck = []*Card{
@@ -73,6 +74,7 @@ func main() {
 	http.HandleFunc("/render", renderHandler)
 	http.HandleFunc("/play", playHandler)
 	http.HandleFunc("/trick", trickHandler)
+	http.HandleFunc("/define", defineHandler)
 
 	http.ListenAndServe(":9010", nil)
 }
@@ -101,8 +103,19 @@ func startHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	players[requestBody.Player].IsNext = true	
+	players[requestBody.Player].passOnToTheNext()	
 
 	w.WriteHeader(http.StatusOK)
 	pingAllClients()
 }
+
+func dealCards() {
+	rand.Shuffle(len(Deck), func(i, j int) { Deck[i], Deck[j] = Deck[j], Deck[i] })
+
+	for i,_ := range Deck {
+		Deck[i].Player = i%4
+		Deck[i].Place = "Hand"
+	}
+}
+
+

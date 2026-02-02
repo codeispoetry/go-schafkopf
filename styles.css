@@ -2,6 +2,26 @@ body.your-turn {
     background-color: darkgreen;
 }
 
+#declare_buttons{
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    gap: 10px;
+
+    button{
+        padding: 10px;
+        border-radius: 5px;
+        border: none;
+        background-color: darkblue;
+        color: white;
+        cursor: pointer;
+
+        &:hover{
+            background-color: blue;
+        }
+    }
+}
+
 ul.card{
     list-style-type: none;
     display: flex;
@@ -78,9 +98,12 @@ ul.card{
 
 }
 
-ul#hand li{
-    transform-origin: bottom center;
-    margin-right: -70px;
+ul#hand{
+    margin-bottom: 60px;    
+    li{
+        transform-origin: bottom center;
+        margin-right: -70px;
+    }
 }
 
 div#felt{
@@ -111,7 +134,7 @@ div#felt{
     }
 
 
-    ul#deck{
+    ul#trick{
         width: 270px;
         height: 280px;
         position: absolute;

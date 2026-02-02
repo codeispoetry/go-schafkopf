@@ -1,9 +1,5 @@
 package main
 
-import (
-	"math/rand"
-)
-
 type Card struct {
 	Id         int
 	Suit       string // e.g., "Eichel", "Gras", "Herz", "Schellen"
@@ -18,15 +14,6 @@ type Card struct {
 	Trump 	   bool   // whether the card is a trump card
 }
 
-
-func dealCards() {
-	rand.Shuffle(len(Deck), func(i, j int) { Deck[i], Deck[j] = Deck[j], Deck[i] })
-
-	for i,_ := range Deck {
-		Deck[i].Player = i%4
-		Deck[i].Place = "Hand"
-	}
-}
 
 func getCardById(cardId int) *Card {
 	for _, card := range Deck {

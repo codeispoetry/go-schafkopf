@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"sort"
+	"fmt"
 )
 
 type Info struct {
@@ -12,8 +13,10 @@ type Info struct {
 	NextPlayer    int
 	TrickWinner   int
 	IsFinished	  bool
+	IsGameDefined bool
 	Players       []*Player
-
+	Scores        []int
+	FinishLine    string
 }
 
 func renderHandler(w http.ResponseWriter, r *http.Request) {
@@ -30,7 +33,11 @@ func renderHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	Hand := setPlayableCards(players[requestBody.Player].Hand())	
+	Hand := players[requestBody.Player].Hand()
+
+	if(requestBody.Player == getNextPlayer()) {
+		Hand = setPlayableCards(Hand)
+	}
 	
 	Info := Info{
 		Hand:          Hand,
@@ -38,10 +45,59 @@ func renderHandler(w http.ResponseWriter, r *http.Request) {
 		NextPlayer:    getNextPlayer(),
 		TrickWinner:   getTrickWinner(),
 		IsFinished:    isFinished(),
+		IsGameDefined: isGameDefined(),
 		Players:       players,
+		Scores:        calculateScores(),
+		FinishLine: 	getFinishLine(),
 	}
 
 	json.NewEncoder(w).Encode(Info)
+}
+
+func getFinishLine() string {
+	if(!isFinished() || !isGameDefined()) {
+		return ""
+	}
+
+	gamers := ""
+	gamersScore := 0
+
+	for _, player := range players {
+		if player.Gamer {
+			gamers += player.Name + " und "
+			gamersScore += player.Points
+		}
+	}
+
+	gamers = gamers[:len(gamers)-5] // remove last "und"
+	wonOrLost := "verloren"
+
+	
+	if gamersScore >= 61 {
+		wonOrLost = "gewonnen"
+	}
+
+	return fmt.Sprintf("%s hat %d Punkte und somit %s!", gamers, gamersScore, wonOrLost)
+}
+
+func calculateScores() []int{
+	if !isFinished() || !isGameDefined() {
+		return []int{0, 0}
+	}
+
+	gamerPoints := 0
+	nonGamerPoints := 0
+
+	for _, player := range players {
+		if player.Gamer {
+			gamerPoints += player.Points
+		} else {
+			nonGamerPoints += player.Points
+		}
+	}
+
+	return []int{gamerPoints, nonGamerPoints}
+
 }
 
 func isFinished() bool {
@@ -57,6 +113,18 @@ func isFinished() bool {
 
 func setPlayableCards(hand []*Card) []*Card {
 	table := getTable()
+
+	// if no gamer, all cards unplayable
+	gameDefined := false
+	for _, player := range players {
+		if player.Gamer {
+			gameDefined = true
+			break
+		}
+	}
+	if !gameDefined {
+		return hand
+	}
 
 	// If no cards on table, all cards are playable
 	if len(table) == 0 {
@@ -129,6 +197,10 @@ func getTable() []Card {
 }
 
 func getNextPlayer() int {
+	if(isFinished()) {
+		return 0 // handle to the next toDo
+	}
+
 	for _, player := range players {
 		if player.IsNext {
 			return player.Id
@@ -150,4 +222,13 @@ func getTrickWinner() int {
 		}
 	}
 	return 	winnerCard.Player
+}
+
+func isGameDefined() bool {
+	for _, player := range players {
+		if player.Gamer {
+			return true
+		}
+	}
+	return false
 }

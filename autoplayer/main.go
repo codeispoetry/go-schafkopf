@@ -19,7 +19,7 @@ func main() {
 
 	
 	startWithPlayer = 1 
-	waitMillis = 500
+	waitMillis = 10
 	
 
 	// Connect to websocket

@@ -48,13 +48,10 @@ function render(){
 }
 
 function renderFinished(data){
-    document.querySelector('body').classList.remove('your-turn');
     const status = document.querySelector('#status');
     status.innerHTML = '';
 
-    for(const player of data.Players){
-        status.innerHTML += `<br/>${player.Name}: ${player.Points} points, ${player.Tricks} tricks`;
-    }
+    status.innerHTML += `<br>${data.FinishLine}`;
 }
 
 function renderStatus(data) {
@@ -63,29 +60,32 @@ function renderStatus(data) {
     playerInfoElement.innerHTML = `${currentPlayer.Name}`;
     const body = document.querySelector('body');
 
-    
+    if(!data.IsFinished) {
+        const status = document.querySelector('#status');
+        status.innerHTML = '';
+    }
 
     body.classList.remove('your-turn');
     if(data.NextPlayer === player) {
         body.classList.add('your-turn');
     }
 
-    document.getElementById('getTrick').style.display = 'none';
+    document.getElementById('trick').dataset.takable = 'false';
 
     if(data.TrickWinner !== -1 && player === data.TrickWinner){
-        document.getElementById('getTrick').style.display = 'block';
+        document.getElementById('trick').dataset.takable = 'true';
     }
     
 
 }
 
 function renderTable(data){
-    const deckElement = document.getElementById('deck');
+    const trickElement = document.getElementById('trick');
     const feltElement = document.getElementById('felt');
 
     feltElement.className = '';
 
-    deckElement.innerHTML = '';
+    trickElement.innerHTML = '';
     if(data.Table === null) {
         return;
     }
@@ -101,7 +101,7 @@ function renderTable(data){
         li.classList.add(`${card.Rank.toLowerCase().replace('ö', 'oe')}`);
         li.classList.add(`player${card.Player}`);
         li.style.zIndex = `${10 + card.Position}`;
-        deckElement.appendChild(li);
+        trickElement.appendChild(li);
     }
 }
 
@@ -172,7 +172,7 @@ function playCard(event) {
     .catch(error => console.error('Error:', error));
 }
 
-document.getElementById('getTrick').addEventListener('click', getTrick);
+document.getElementById('trick').addEventListener('click', getTrick);
 function getTrick(){
      fetch('http://localhost:9010/trick', {
         method: 'POST',
@@ -201,6 +201,32 @@ function startGame(){
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({player: player})
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        render()
+       
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+document.querySelectorAll('[data-game]').forEach(button => {
+    button.addEventListener('click', defineGame);
+})
+
+function defineGame(event){
+    const gameType = event.target.getAttribute('data-game');
+        fetch('http://localhost:9010/define', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },          
+        body: JSON.stringify({
+            "player": player,
+            "game": gameType
+        })
     })
     .then(response => {
         if (!response.ok) {
