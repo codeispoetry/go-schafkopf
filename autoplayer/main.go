@@ -19,7 +19,7 @@ func main() {
 
 	
 	startWithPlayer = 1 
-	waitMillis = 10
+	waitMillis = 1000
 	
 
 	// Connect to websocket
@@ -46,7 +46,7 @@ func main() {
 			cardToPlay, trickWinner, nextPlayer := getInfo(i)
 
 			if(trickWinner != -1 && i == trickWinner) {
-				time.Sleep(time.Duration(waitMillis) * 2 * time.Millisecond)
+				time.Sleep(time.Duration(waitMillis) * 3 * time.Millisecond)
 				takeTrick(trickWinner)
 				continue
 			}

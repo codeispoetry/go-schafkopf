@@ -13,6 +13,9 @@ document.addEventListener('DOMContentLoaded', function() {
     ws.onclose = () => {
         console.log("connection closed");
     };
+
+   
+    document.querySelector('body').classList.add(`player${player}`);
 });
 
 /////////////////////////////
@@ -55,9 +58,6 @@ function renderFinished(data){
 }
 
 function renderStatus(data) {
-    const playerInfoElement = document.getElementById('playerInfo');
-    const currentPlayer = getPlayer(player, data.Players);
-    playerInfoElement.innerHTML = `${currentPlayer.Name}`;
     const body = document.querySelector('body');
 
     if(!data.IsFinished) {

@@ -1,7 +1,3 @@
-body.your-turn {
-    background-color: darkgreen;
-}
-
 #declare_buttons{
     display: flex;
     justify-content: center;
@@ -106,10 +102,13 @@ ul#hand{
     }
 }
 
+body.your-turn div#felt{
+    background-color: darkolivegreen;
+}
 div#felt{
     height: 500px;
     width: 500px;
-    background-color: darkolivegreen;
+    background-color: rgb(168, 188, 133);
     border-radius: 10px;
     display: flex;
     justify-content: center;
@@ -164,9 +163,74 @@ div#felt{
     }
 }
 
-.your-turn{
-    color: white;
-    padding: 4px;
-    background-color: green;
+body.player0 #table,
+body.player1 #table,
+body.player2 #table,
+body.player3 #table{
+     .player-bottom,  .player-top{
+        text-align: center
+    }
 }
 
+body.player0{
+    #table{
+        transform: rotate(0deg);
+    }
+    .player-left{
+        transform: rotate(-90deg);
+    }
+    .player-right{
+        transform: rotate(90deg);
+    }
+}
+body.player1{
+    #table{
+        transform: rotate(-90deg);
+    }
+    .player-left{
+        transform: rotate(-90deg);
+    }
+    .player-right{
+        transform: rotate(90deg);
+    }
+    .player-bottom{
+        transform: rotate(180deg);
+    }
+    .player-left{
+        transform: rotate(90deg);
+    }
+}
+body.player2{
+    #table{
+        transform: rotate(-180deg);
+    }
+    .player-left{
+        transform: rotate(270deg);
+    }
+    .player-right{
+        transform: rotate(90deg);
+    }
+    .player-bottom{
+        transform: rotate(180deg);
+    }
+    .player-top{
+        transform: rotate(180deg);
+    }
+}
+body.player3{
+    #table{
+        transform: rotate(-270deg);
+    }
+    .player-left{
+        transform: rotate(-90deg);
+    }
+    .player-right{
+        transform: rotate(-90deg);
+    }
+    .player-top{
+        transform: rotate(0);
+    }
+    .player-bottom{
+        transform: rotate(180deg);
+    }
+}
