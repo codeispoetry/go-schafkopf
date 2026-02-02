@@ -31,12 +31,13 @@ function render(){
     .then(response => response.json())
     .then(data => {
 
-        if(data.IsFinished){
-            renderFinished(data);
-        }
         renderPlayer(data);
         renderTable(data);
         renderStatus(data);
+
+        if(data.IsFinished){
+            renderFinished(data);
+        }
     })
     .catch(error => {
         console.error('Error:', error);
@@ -47,6 +48,7 @@ function render(){
 }
 
 function renderFinished(data){
+    document.querySelector('body').classList.remove('your-turn');
     const status = document.querySelector('#status');
     status.innerHTML = '';
 

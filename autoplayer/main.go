@@ -14,6 +14,14 @@ var url = "http://localhost:9010/"
 
 func main() {
 
+	startWithPlayer := 0 
+	waitMillis := 0
+
+	
+	startWithPlayer = 1 
+	waitMillis = 500
+	
+
 	// Connect to websocket
 	wsURL := "ws://localhost:9010/ws"
 	conn, _, err := websocket.DefaultDialer.Dial(wsURL, nil)
@@ -32,11 +40,13 @@ func main() {
 		}
 		fmt.Println(string(message))
 
-		for i := 0; i <= 3; i++ {
+
+		for i := startWithPlayer; i <= 3; i++ {
 
 			cardToPlay, trickWinner, nextPlayer := getInfo(i)
 
-			if(trickWinner != -1) {
+			if(trickWinner != -1 && i == trickWinner) {
+				time.Sleep(time.Duration(waitMillis) * 2 * time.Millisecond)
 				takeTrick(trickWinner)
 				continue
 			}
@@ -45,7 +55,7 @@ func main() {
 				continue
 			}
 
-			time.Sleep(10 * time.Millisecond)
+			time.Sleep(time.Duration(waitMillis) * time.Millisecond)
 			if cardToPlay != -1 {
 				play(i, cardToPlay)
 			}
