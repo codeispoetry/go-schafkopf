@@ -45,7 +45,18 @@ func defineHandler(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 		}
+		setRufspiel()
 	}
+
+	if requestBody.Game == "Solo" {
+		setSolo(requestBody.Suit)
+	}
+
+	if requestBody.Game == "Wenz" {
+		setWenz()
+	}
+
+	log.Printf("Player %d defined game %s with suit %s", requestBody.Player, requestBody.Game, requestBody.Suit)
 	
 	w.WriteHeader(http.StatusOK)
 	pingAllClients()

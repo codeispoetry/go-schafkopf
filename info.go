@@ -46,23 +46,7 @@ func renderHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	
-	var gameOptions []GameOption
-	if !isGameDefined() {
-		for _, card := range Hand {
-			if card.Suit == "Herz" {
-				continue
-			}
-			if slices.Contains([]string{"Sieben", "Acht", "Neun", "König", "Zehn"}, card.Rank){
-				for _, option := range gameOptions {
-					if option.Game == "Sauspiel" && option.Suit == card.Suit {
-						goto NextCard
-					}
-				}
-				gameOptions = append(gameOptions, GameOption{Game: "Sauspiel", Suit: card.Suit})
-			}
-		NextCard:
-		}
-	}
+	
 
 	status := "none"
 	if(Deck[0].Place == "Hand") {
@@ -88,10 +72,39 @@ func renderHandler(w http.ResponseWriter, r *http.Request) {
 		Players:       players,
 		Scores:        calculateScores(),
 		FinishLine:    getFinishLine(),
-		GameOptions:   gameOptions,
+		GameOptions:   getGameOptions(Hand),
 	}
 
 	json.NewEncoder(w).Encode(Info)
+}
+
+func getGameOptions(hand []*Card) []GameOption {
+	var gameOptions []GameOption
+	if isGameDefined() || hand == nil {
+		return gameOptions
+	}
+
+	for _, card := range hand {
+		if card.Suit == "Herz" {
+			continue
+		}
+		if slices.Contains([]string{"Sieben", "Acht", "Neun", "König", "Zehn"}, card.Rank){
+			for _, option := range gameOptions {
+				if option.Game == "Sauspiel" && option.Suit == card.Suit {
+					goto NextCard
+				}
+			}
+			gameOptions = append(gameOptions, GameOption{Game: "Sauspiel", Suit: card.Suit})
+		}
+	NextCard:
+	}
+
+	gameOptions = append(gameOptions, GameOption{Game: "Solo", Suit: "Herz"})
+	gameOptions = append(gameOptions, GameOption{Game: "Solo", Suit: "Eichel"})
+	gameOptions = append(gameOptions, GameOption{Game: "Solo", Suit: "Gras"})
+	gameOptions = append(gameOptions, GameOption{Game: "Solo", Suit: "Schellen"})
+	
+	return gameOptions
 }
 
 func getFinishLine() string {
