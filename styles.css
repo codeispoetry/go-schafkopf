@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+NZ+Basic:wght@100..400&display=swap');
+
 #declare_buttons{
     display: flex;
     justify-content: center;
@@ -8,12 +10,12 @@
         padding: 10px;
         border-radius: 5px;
         border: none;
-        background-color: darkblue;
+        background-color: hsl(0, 40%, 51%);
         color: white;
         cursor: pointer;
 
         &:hover{
-            background-color: blue;
+            background-color: hsl(0, 60%, 51%);
         }
     }
 }
@@ -96,23 +98,35 @@ ul.card{
 
 ul#hand{
     margin-bottom: 60px;    
+    padding-left: 90px;
+    
     li{
         transform-origin: bottom center;
         margin-right: -70px;
     }
 }
 
-#shuffle{
-    display: none;
-}
-body.your-turn{
-    div#felt{
-        background-color: darkolivegreen;
+
+body{
+    display: flex;
+    justify-content: center;
+    background-color: #2c3e50;
+    color: white;
+    font-family: "Playwrite NZ Basic", cursive;
+    font-optical-sizing: auto;
+    font-weight: 100;
+    font-style: normal;
+
+    &.your-turn{
+        div#felt{
+            background-color: darkolivegreen;
+        }
+        #shuffle{
+            display: block;
+        }
     }
-    #shuffle{
-        display: block;
-    }
 }
+
 div#felt{
     height: 500px;
     width: 500px;
@@ -241,8 +255,4 @@ body.player3{
     .player-bottom{
         transform: rotate(180deg);
     }
-}
-
-[data-game]{
-    display: none;
 }

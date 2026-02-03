@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html lang="de">    
+<head>        
+    <meta charset="UTF-8">        
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">        
+    <title>Schafkopf</title>        
+    <link rel="stylesheet" href="styles.css">    
+     <script src="app.js" defer=""></script>  
+</head>    
+<body>   
+    <div id="content">     
+        <div id="status"></div>
+        
+        <table id="table">
+            <tr>
+                <td colspan="3" class="player-top">Sibylle</td>
+            </tr>
+            <tr>
+                <td  class="player-left">Max</td>
+                <td>
+                    <div id="felt">
+                        <ul id="trick" class="card"></ul>
+                    </div>
+                </td>
+                <td class="player-right">Birgit</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="player-bottom">Tom</td>
+            </tr>
+        </table>
+        
+        
+        <ul id="hand" class="card"></ul>
+
+        <button id="shuffle">Mische und verteile</button>  
+
+        <div id="declare_buttons">
+            <button data-game="Sauspiel" data-suit="Eichel">Rufe Eichel</button>
+            <button data-game="Sauspiel" data-suit="Gras">Rufe Gras</button>
+            <button data-game="Sauspiel" data-suit="Schellen">Rufe Schellen</button>
+        </div>
+            
+    </div>  
+
+</body>
+</html>

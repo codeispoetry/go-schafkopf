@@ -18,8 +18,7 @@ type Info struct {
 	Table         []Card
 	NextPlayer    int
 	TrickWinner   int
-	IsFinished    bool
-	IsGameDefined bool
+	Status 	      string
 	Players       []*Player
 	Scores        []int
 	FinishLine    string
@@ -64,6 +63,14 @@ func renderHandler(w http.ResponseWriter, r *http.Request) {
 		NextCard:
 		}
 	}
+
+	status := ""
+	if(isGameDefined()) {
+		status = "defined"
+	}
+	if isFinished() {
+		status = "finished"
+	}
 	
 
 	Info := Info{
@@ -71,8 +78,7 @@ func renderHandler(w http.ResponseWriter, r *http.Request) {
 		Table:         getTable(),
 		NextPlayer:    getNextPlayer(),
 		TrickWinner:   getTrickWinner(),
-		IsFinished:    isFinished(),
-		IsGameDefined: isGameDefined(),
+		Status:		   status,
 		Players:       players,
 		Scores:        calculateScores(),
 		FinishLine:    getFinishLine(),

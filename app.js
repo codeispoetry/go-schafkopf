@@ -1,8 +1,12 @@
-var gameInterval
 var player
 
 document.addEventListener('DOMContentLoaded', function() {
    player = parseInt(new URLSearchParams(window.location.search).get('player'));
+
+   if(isNaN(player)){
+       document.body.innerHTML = 'Ungültiger Spieler';
+       return;
+   }
    render();
    const ws = new WebSocket("ws://localhost:9010/ws");
 
@@ -34,17 +38,17 @@ function render(){
     .then(response => response.json())
     .then(data => {
 
-        renderPlayer(data);
+        renderHand(data);
         renderTable(data);
         renderStatus(data);
 
-        if(data.IsFinished){
+        if(data.Status === "finished"){
             renderFinished(data);
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        clearInterval(gameInterval);
+        document.body.innerHTML = 'Spielerver nicht erreichbar';
     });
 
     
@@ -60,7 +64,7 @@ function renderFinished(data){
 function renderStatus(data) {
     const body = document.querySelector('body');
 
-    if(!data.IsFinished) {
+    if(data.Status !== "finished") {
         const status = document.querySelector('#status');
         status.innerHTML = '';
     }
@@ -68,25 +72,6 @@ function renderStatus(data) {
     body.classList.remove('your-turn');
     if(data.NextPlayer === player) {
         body.classList.add('your-turn');
-    }
-
-    document.getElementById('trick').dataset.takable = 'false';
-
-    if(data.TrickWinner !== -1 && player === data.TrickWinner){
-        document.getElementById('trick').dataset.takable = 'true';
-    }
-    
-    if( data.Hand !== null ){
-        document.getElementById('open-table').style.display = 'none';
-    }
-
-    if( data.GameOptions !== null ){
-        for (const option of data.GameOptions) {
-            const button = document.querySelector(`[data-game='${option.Game}'][data-suit='${option.Suit}']`);
-            if(button){
-                button.style.display = 'block';
-            }
-        }
     }
 }
 
@@ -114,9 +99,15 @@ function renderTable(data){
         li.style.zIndex = `${10 + card.Position}`;
         trickElement.appendChild(li);
     }
+
+    document.getElementById('trick').dataset.takable = 'false';
+    if(data.TrickWinner !== -1 && player === data.TrickWinner){
+        document.getElementById('trick').dataset.takable = 'true';
+    }
+
 }
 
-function renderPlayer(data){
+function renderHand(data){
     const handElement = document.getElementById('hand');
     handElement.innerHTML = '';
     
@@ -205,11 +196,10 @@ function getTrick(){
 }
 
 document.addEventListener('click', (event) => {
-    if (event.target.matches('#shuffle, #open-table')) {
+    if (event.target.matches('#shuffle')) {
         startGame();
     }
 });
-
 function startGame(){
      fetch('http://localhost:9010/start', {
         method: 'POST',
@@ -231,7 +221,6 @@ function startGame(){
 document.querySelectorAll('[data-game]').forEach(button => {
     button.addEventListener('click', defineGame);
 })
-
 function defineGame(event){
     fetch('http://localhost:9010/define', {
         method: 'POST',
@@ -252,4 +241,8 @@ function defineGame(event){
        
     })
     .catch(error => console.error('Error:', error));
+}
+
+function showButtons(data){
+
 }

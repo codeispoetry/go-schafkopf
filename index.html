@@ -1,46 +1,70 @@
 <!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schafkopf – Spieler wählen</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .start-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+        }
 
-<html lang="de">    
-<head>        
-    <meta charset="UTF-8">        
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">        
-    <title>Schafkopf</title>        
-    <link rel="stylesheet" href="styles.css">    
-</head>    
-<body>        
-    <div id="status"></div>
-    
-    <table id="table">
-        <tr>
-            <td colspan="3" class="player-top">Sibylle</td>
-        </tr>
-        <tr>
-            <td  class="player-left">Max</td>
-            <td>
-                <div id="felt">
-                    <ul id="trick" class="card"></ul>
-                </div>
-            </td>
-            <td class="player-right">Birgit</td>
-        </tr>
-        <tr>
-            <td colspan="3" class="player-bottom">Tom</td>
-        </tr>
-    </table>
-    
-    
-    <ul id="hand" class="card"></ul>
+        .start-title {
+            font-size: 2rem;
+            letter-spacing: 0.05em;
+        }
 
-    <button id="shuffle">Mische und verteile</button>  
+        .player-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
 
-    <div id="declare_buttons">
-        <button data-game="Sauspiel" data-suit="Eichel">Rufe Eichel</button>
-        <button data-game="Sauspiel" data-suit="Gras">Rufe Gras</button>
-        <button data-game="Sauspiel" data-suit="Schellen">Rufe Schellen</button>
+        .player-buttons a {
+            text-decoration: none;
+        }
+
+        .player-button {
+            padding: 12px 24px;
+            border-radius: 6px;
+            border: none;
+            background-color: hsl(0, 40%, 51%);
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.15s ease, transform 0.1s ease;
+        }
+
+        .player-button:hover {
+            background-color: hsl(0, 60%, 51%);
+            transform: translateY(-1px);
+        }
+
+        .hint {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            text-align: center;
+            max-width: 480px;
+        }
+    </style>
+</head>
+<body>
+    <div class="start-wrapper">
+        <div class="start-title">Schafkopf</div>
+        <div class="player-buttons">
+            <a href="game.html?player=0"><button class="player-button">Tom</button></a>
+            <a href="game.html?player=1"><button class="player-button">Max</button></a>
+            <a href="game.html?player=2"><button class="player-button">Sibylle</button></a>
+            <a href="game.html?player=3"><button class="player-button">Birgit</button></a>
+        </div>
+        <p class="hint">Viel Spaß</p>
     </div>
-        
-    <script src="app.js"></script>    
-
-    <button id="open-table">Tisch eröffnen</button>
 </body>
 </html>
