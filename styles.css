@@ -39,7 +39,7 @@ ul.card{
             border-color: green;
             
             &:hover{
-                transition: ease-in-out 0.2s;
+                transition: ease-out 0.2s;
                 transform: translateY(-10px) !important;
                 zoom: 1.07;
                 z-index: 10;

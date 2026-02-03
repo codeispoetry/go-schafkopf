@@ -67,6 +67,9 @@ function renderGameButtons(data){
    document.querySelectorAll('#declare_buttons button').forEach(button => {
         button.style.display = 'none';
 
+        if( data.GameOptions === null ){
+            return;
+        }
         data.GameOptions.forEach(option => {
             if(button.getAttribute('data-game') === option.Game && button.getAttribute('data-suit') === option.Suit){
                 button.style.display = 'inline-block';
@@ -140,7 +143,8 @@ function renderHand(data){
         li.classList.add(`${card.Rank.toLowerCase().replace('ö', 'oe')}`);
 
         const rotation = i * 5 - (data.Hand.length -1 ) * 5 /2;
-        li.style.transform = `translateY(${Math.abs(rotation)*2}px) rotate(${rotation}deg)`;
+        li.style.transform = `translateY(${Math.abs(rotation)*2}px)`
+        li.style.rotate = `${rotation}deg`;
 
 
         if(card.Playable){
