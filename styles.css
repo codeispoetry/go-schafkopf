@@ -102,8 +102,16 @@ ul#hand{
     }
 }
 
-body.your-turn div#felt{
-    background-color: darkolivegreen;
+#shuffle{
+    display: none;
+}
+body.your-turn{
+    div#felt{
+        background-color: darkolivegreen;
+    }
+    #shuffle{
+        display: block;
+    }
 }
 div#felt{
     height: 500px;
@@ -233,4 +241,8 @@ body.player3{
     .player-bottom{
         transform: rotate(180deg);
     }
+}
+
+[data-game]{
+    display: none;
 }

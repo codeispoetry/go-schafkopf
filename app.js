@@ -76,7 +76,18 @@ function renderStatus(data) {
         document.getElementById('trick').dataset.takable = 'true';
     }
     
+    if( data.Hand !== null ){
+        document.getElementById('open-table').style.display = 'none';
+    }
 
+    if( data.GameOptions !== null ){
+        for (const option of data.GameOptions) {
+            const button = document.querySelector(`[data-game='${option.Game}'][data-suit='${option.Suit}']`);
+            if(button){
+                button.style.display = 'block';
+            }
+        }
+    }
 }
 
 function renderTable(data){
@@ -193,7 +204,12 @@ function getTrick(){
     .catch(error => console.error('Error:', error));
 }
 
-document.getElementById('startGame').addEventListener('click', startGame);
+document.addEventListener('click', (event) => {
+    if (event.target.matches('#shuffle, #open-table')) {
+        startGame();
+    }
+});
+
 function startGame(){
      fetch('http://localhost:9010/start', {
         method: 'POST',
@@ -217,15 +233,15 @@ document.querySelectorAll('[data-game]').forEach(button => {
 })
 
 function defineGame(event){
-    const gameType = event.target.getAttribute('data-game');
-        fetch('http://localhost:9010/define', {
+    fetch('http://localhost:9010/define', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },          
         body: JSON.stringify({
             "player": player,
-            "game": gameType
+            "game": event.target.getAttribute('data-game'),
+            "suit": event.target.getAttribute('data-suit')
         })
     })
     .then(response => {

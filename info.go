@@ -4,10 +4,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"slices"
 	"sort"
 	"strings"
 )
 
+type GameOption struct {
+	Game string
+	Suit string
+}
 type Info struct {
 	Hand          []*Card
 	Table         []Card
@@ -18,6 +23,7 @@ type Info struct {
 	Players       []*Player
 	Scores        []int
 	FinishLine    string
+	GameOptions   []GameOption
 }
 
 func renderHandler(w http.ResponseWriter, r *http.Request) {
@@ -40,6 +46,26 @@ func renderHandler(w http.ResponseWriter, r *http.Request) {
 		Hand = setPlayableCards(Hand)
 	}
 
+	
+	var gameOptions []GameOption
+	if !isGameDefined() {
+		for _, card := range Hand {
+			if card.Suit == "Herz" {
+				continue
+			}
+			if slices.Contains([]string{"Sieben", "Acht", "Neun", "König", "Zehn"}, card.Rank){
+				for _, option := range gameOptions {
+					if option.Game == "Sauspiel" && option.Suit == card.Suit {
+						goto NextCard
+					}
+				}
+				gameOptions = append(gameOptions, GameOption{Game: "Sauspiel", Suit: card.Suit})
+			}
+		NextCard:
+		}
+	}
+	
+
 	Info := Info{
 		Hand:          Hand,
 		Table:         getTable(),
@@ -50,6 +76,7 @@ func renderHandler(w http.ResponseWriter, r *http.Request) {
 		Players:       players,
 		Scores:        calculateScores(),
 		FinishLine:    getFinishLine(),
+		GameOptions:   gameOptions,
 	}
 
 	json.NewEncoder(w).Encode(Info)
@@ -183,7 +210,7 @@ func getTable() []Card {
 		}
 	}
 
-	// Sort table cards by player ID
+	// Sort table cards by position
 	sort.Slice(table, func(i, j int) bool {
 		return table[i].Position < table[j].Position
 	})
@@ -192,7 +219,11 @@ func getTable() []Card {
 
 func getNextPlayer() int {
 	if isFinished() {
-		return 0 // handle to the next toDo
+		for _,card := range Deck {
+			if card.Position == 1 {
+				return card.Player
+			}
+		}
 	}
 
 	for _, player := range players {
@@ -225,4 +256,14 @@ func isGameDefined() bool {
 		}
 	}
 	return false
+}
+
+func countTricks() int {
+	counter := 0
+	for _, card := range Deck {
+		if card.Place == "Trick"{
+			counter++
+		}
+	}
+	return counter
 }

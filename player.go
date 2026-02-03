@@ -2,9 +2,9 @@ package main
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"sort"
-	"log"
 )
 
 type Player struct {
@@ -23,6 +23,8 @@ func defineHandler(w http.ResponseWriter, r *http.Request) {
 
 	var requestBody struct {
 		Player int `json:"player"`
+		Game string `json:"game"`
+		Suit string `json:"suit"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&requestBody); err != nil {
@@ -34,8 +36,16 @@ func defineHandler(w http.ResponseWriter, r *http.Request) {
 		player.Gamer = false
 	}
 	players[requestBody.Player].Gamer = true
-	players[2].Gamer = true
 
+	if requestBody.Game == "Sauspiel" {
+		for _, card := range Deck {
+			if card.Suit == requestBody.Suit && card.Rank == "Ass" {
+				partnerPlayerId := card.Player
+				players[partnerPlayerId].Gamer = true
+				break
+			}
+		}
+	}
 	
 	w.WriteHeader(http.StatusOK)
 	pingAllClients()
@@ -79,7 +89,7 @@ func playHandler(w http.ResponseWriter, r *http.Request) {
 	card := getCardById(requestBody.Card)
 	
 	card.Place = "Table"
-	card.Position = len(getTable())
+	card.Position = countTricks() + len(getTable())
 	card.Playable = false
 
 
