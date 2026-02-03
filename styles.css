@@ -127,6 +127,27 @@ body{
     }
 }
 
+body[data-player="0"]{
+    td.player0{
+        font-weight: bold
+    }
+}
+body[data-player="1"]{
+    td.player1{
+        font-weight: bold
+    }
+}
+body[data-player="2"]{
+    td.player2{
+        font-weight: bold
+    }
+}
+body[data-player="3"]{
+    td.player3{
+        font-weight: bold
+    }
+}
+
 div#felt{
     height: 500px;
     width: 500px;

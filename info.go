@@ -64,9 +64,15 @@ func renderHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	status := ""
+	status := "none"
+	if(Deck[0].Place == "Hand") {
+		status = "shuffled"
+	}
 	if(isGameDefined()) {
 		status = "defined"
+	}
+	if isPlaying() {
+		status = "playing"
 	}
 	if isFinished() {
 		status = "finished"
@@ -138,6 +144,16 @@ func isFinished() bool {
 	}
 
 	return playedCards == len(Deck)
+}
+
+func isPlaying() bool {
+	i := 0
+	for _, card := range Deck {
+		if card.Place == "Hand" {
+			i++
+		}
+	}
+	return i > 0 &&i < len(Deck)
 }
 
 func setPlayableCards(hand []*Card) []*Card {

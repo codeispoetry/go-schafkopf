@@ -38,6 +38,11 @@ function render(){
     .then(response => response.json())
     .then(data => {
 
+        document.body.dataset.gamestate = data.Status;
+        document.body.dataset.player = data.NextPlayer;
+
+        renderReset();
+
         renderHand(data);
         renderTable(data);
         renderStatus(data);
@@ -50,8 +55,11 @@ function render(){
         console.error('Error:', error);
         document.body.innerHTML = 'Spielerver nicht erreichbar';
     });
+}
 
-    
+function renderReset(){
+    const status = document.querySelector('#status');
+    status.innerHTML = '';
 }
 
 function renderFinished(data){
@@ -63,11 +71,6 @@ function renderFinished(data){
 
 function renderStatus(data) {
     const body = document.querySelector('body');
-
-    if(data.Status !== "finished") {
-        const status = document.querySelector('#status');
-        status.innerHTML = '';
-    }
 
     body.classList.remove('your-turn');
     if(data.NextPlayer === player) {
