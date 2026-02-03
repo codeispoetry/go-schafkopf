@@ -246,6 +246,3 @@ function defineGame(event){
     .catch(error => console.error('Error:', error));
 }
 
-function showButtons(data){
-
-}

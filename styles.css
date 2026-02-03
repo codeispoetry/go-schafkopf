@@ -116,15 +116,6 @@ body{
     font-optical-sizing: auto;
     font-weight: 100;
     font-style: normal;
-
-    &.your-turn{
-        div#felt{
-            background-color: darkolivegreen;
-        }
-        #shuffle{
-            display: block;
-        }
-    }
 }
 
 body[data-player="0"]{
@@ -151,7 +142,7 @@ body[data-player="3"]{
 div#felt{
     height: 500px;
     width: 500px;
-    background-color: rgb(168, 188, 133);
+    background-color: darkolivegreen;
     border-radius: 10px;
     display: flex;
     justify-content: center;
@@ -275,5 +266,26 @@ body.player3{
     }
     .player-bottom{
         transform: rotate(180deg);
+    }
+}
+
+body button{
+    display: none;
+}
+body[data-gamestate="none"]{
+    button.none{
+        display: block;
+    }
+}
+
+body[data-gamestate="shuffled"]{
+    button.shuffled{
+        display: block;
+    }
+}
+
+body[data-gamestate="finished"]{
+    button.finished{
+        display: block;
     }
 }
