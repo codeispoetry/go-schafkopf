@@ -9,46 +9,46 @@ import (
 )
 
 var Deck = []*Card{
-	{Id: 32, Suit: "Eichel", Rank: "Ober", Value: 3, Trump: false, Player: 0, Place: "Deck", FightOrder: 33, SortOrder: 73},
-	{Id: 1, Suit: "Eichel", Rank: "Unter", Value: 2, Trump: false, Player: 0, Place: "Deck", FightOrder: 23, SortOrder: 63},
+	{Id: 32, Suit: "Eichel", Rank: "Ober", Value: 3, Trump: false, Player: 0, Place: "Deck", FightOrder: 33, SortOrder: 0},
+	{Id: 1, Suit: "Eichel", Rank: "Unter", Value: 2, Trump: false, Player: 0, Place: "Deck", FightOrder: 23, SortOrder: 0},
 
-	{Id: 3, Suit: "Eichel", Rank: "Ass", Value: 11, Trump: false, Player: 0, Place: "Deck", FightOrder: 6, SortOrder: 45},
-	{Id: 4, Suit: "Eichel", Rank: "Zehn", Value: 10, Trump: false, Player: 0, Place: "Deck", FightOrder: 5, SortOrder: 44},
-	{Id: 2, Suit: "Eichel", Rank: "König", Value: 4, Trump: false, Player: 0, Place: "Deck", FightOrder: 4, SortOrder: 43},
-	{Id: 5, Suit: "Eichel", Rank: "Neun", Value: 0, Trump: false, Player: 0, Place: "Deck", FightOrder: 3, SortOrder: 42},
-	{Id: 6, Suit: "Eichel", Rank: "Acht", Value: 0, Trump: false, Player: 0, Place: "Deck", FightOrder: 2, SortOrder: 41},
-	{Id: 7, Suit: "Eichel", Rank: "Sieben", Value: 0, Trump: false, Player: 0, Place: "Deck", FightOrder: 1, SortOrder: 40},
+	{Id: 3, Suit: "Eichel", Rank: "Ass", Value: 11, Trump: false, Player: 0, Place: "Deck", FightOrder: 6, SortOrder: 0},
+	{Id: 4, Suit: "Eichel", Rank: "Zehn", Value: 10, Trump: false, Player: 0, Place: "Deck", FightOrder: 5, SortOrder: 0},
+	{Id: 2, Suit: "Eichel", Rank: "König", Value: 4, Trump: false, Player: 0, Place: "Deck", FightOrder: 4, SortOrder: 0},
+	{Id: 5, Suit: "Eichel", Rank: "Neun", Value: 0, Trump: false, Player: 0, Place: "Deck", FightOrder: 3, SortOrder: 0},
+	{Id: 6, Suit: "Eichel", Rank: "Acht", Value: 0, Trump: false, Player: 0, Place: "Deck", FightOrder: 2, SortOrder: 0},
+	{Id: 7, Suit: "Eichel", Rank: "Sieben", Value: 0, Trump: false, Player: 0, Place: "Deck", FightOrder: 1, SortOrder: 0},
 
-	{Id: 8, Suit: "Gras", Rank: "Ober", Value: 3, Trump: false, Player: 0, Place: "Deck", FightOrder: 32, SortOrder: 72},
-	{Id: 9, Suit: "Gras", Rank: "Unter", Value: 2, Trump: false, Player: 0, Place: "Deck", FightOrder: 22, SortOrder: 62},
+	{Id: 8, Suit: "Gras", Rank: "Ober", Value: 3, Trump: false, Player: 0, Place: "Deck", FightOrder: 32, SortOrder: 0},
+	{Id: 9, Suit: "Gras", Rank: "Unter", Value: 2, Trump: false, Player: 0, Place: "Deck", FightOrder: 22, SortOrder: 0},
 
-	{Id: 11, Suit: "Gras", Rank: "Ass", Value: 11, Trump: false, Player: 0, Place: "Deck", FightOrder: 6, SortOrder: 35},
-	{Id: 12, Suit: "Gras", Rank: "Zehn", Value: 10, Trump: false, Player: 0, Place: "Deck", FightOrder: 5, SortOrder: 34},
-	{Id: 10, Suit: "Gras", Rank: "König", Value: 4, Trump: false, Player: 0, Place: "Deck", FightOrder: 4, SortOrder: 33},
-	{Id: 13, Suit: "Gras", Rank: "Neun", Value: 0, Trump: false, Player: 0, Place: "Deck", FightOrder: 3, SortOrder: 32},
-	{Id: 14, Suit: "Gras", Rank: "Acht", Value: 0, Trump: false, Player: 0, Place: "Deck", FightOrder: 2, SortOrder: 31},
-	{Id: 15, Suit: "Gras", Rank: "Sieben", Value: 0, Trump: false, Player: 0, Place: "Deck", FightOrder: 1, SortOrder: 30},
+	{Id: 11, Suit: "Gras", Rank: "Ass", Value: 11, Trump: false, Player: 0, Place: "Deck", FightOrder: 6, SortOrder: 0},
+	{Id: 12, Suit: "Gras", Rank: "Zehn", Value: 10, Trump: false, Player: 0, Place: "Deck", FightOrder: 5, SortOrder: 0},
+	{Id: 10, Suit: "Gras", Rank: "König", Value: 4, Trump: false, Player: 0, Place: "Deck", FightOrder: 4, SortOrder: 0},
+	{Id: 13, Suit: "Gras", Rank: "Neun", Value: 0, Trump: false, Player: 0, Place: "Deck", FightOrder: 3, SortOrder: 0},
+	{Id: 14, Suit: "Gras", Rank: "Acht", Value: 0, Trump: false, Player: 0, Place: "Deck", FightOrder: 2, SortOrder: 0},
+	{Id: 15, Suit: "Gras", Rank: "Sieben", Value: 0, Trump: false, Player: 0, Place: "Deck", FightOrder: 1, SortOrder: 0},
 
-	{Id: 16, Suit: "Herz", Rank: "Ober", Value: 3, Trump: false, Player: 0, Place: "Deck", FightOrder: 31, SortOrder: 71},
-	{Id: 17, Suit: "Herz", Rank: "Unter", Value: 2, Trump: false, Player: 0, Place: "Deck", FightOrder: 21, SortOrder: 61},
+	{Id: 16, Suit: "Herz", Rank: "Ober", Value: 3, Trump: false, Player: 0, Place: "Deck", FightOrder: 31, SortOrder: 0},
+	{Id: 17, Suit: "Herz", Rank: "Unter", Value: 2, Trump: false, Player: 0, Place: "Deck", FightOrder: 21, SortOrder: 0},
 
-	{Id: 19, Suit: "Herz", Rank: "Ass", Value: 11, Trump: false, Player: 0, Place: "Deck", FightOrder: 16, SortOrder: 55},
-	{Id: 20, Suit: "Herz", Rank: "Zehn", Value: 10, Trump: false, Player: 0, Place: "Deck", FightOrder: 15, SortOrder: 54},
-	{Id: 18, Suit: "Herz", Rank: "König", Value: 4, Trump: false, Player: 0, Place: "Deck", FightOrder: 14, SortOrder: 53},
-	{Id: 21, Suit: "Herz", Rank: "Neun", Value: 0, Trump: false, Player: 0, Place: "Deck", FightOrder: 13, SortOrder: 52},
-	{Id: 22, Suit: "Herz", Rank: "Acht", Value: 0, Trump: false, Player: 0, Place: "Deck", FightOrder: 12, SortOrder: 51},
-	{Id: 23, Suit: "Herz", Rank: "Sieben", Value: 0, Trump: false, Player: 0, Place: "Deck", FightOrder: 11, SortOrder: 50},
+	{Id: 19, Suit: "Herz", Rank: "Ass", Value: 11, Trump: false, Player: 0, Place: "Deck", FightOrder: 16, SortOrder: 0},
+	{Id: 20, Suit: "Herz", Rank: "Zehn", Value: 10, Trump: false, Player: 0, Place: "Deck", FightOrder: 15, SortOrder: 0},
+	{Id: 18, Suit: "Herz", Rank: "König", Value: 4, Trump: false, Player: 0, Place: "Deck", FightOrder: 14, SortOrder: 0},
+	{Id: 21, Suit: "Herz", Rank: "Neun", Value: 0, Trump: false, Player: 0, Place: "Deck", FightOrder: 13, SortOrder: 0},
+	{Id: 22, Suit: "Herz", Rank: "Acht", Value: 0, Trump: false, Player: 0, Place: "Deck", FightOrder: 12, SortOrder: 0},
+	{Id: 23, Suit: "Herz", Rank: "Sieben", Value: 0, Trump: false, Player: 0, Place: "Deck", FightOrder: 11, SortOrder: 0},
 
 
-	{Id: 24, Suit: "Schellen", Rank: "Ober", Value: 3, Trump: false, Player: 0, Place: "Deck", FightOrder: 30, SortOrder: 70},
-	{Id: 25, Suit: "Schellen", Rank: "Unter", Value: 2, Trump: false, Player: 0, Place: "Deck", FightOrder: 20, SortOrder: 60},
+	{Id: 24, Suit: "Schellen", Rank: "Ober", Value: 3, Trump: false, Player: 0, Place: "Deck", FightOrder: 30, SortOrder: 0},
+	{Id: 25, Suit: "Schellen", Rank: "Unter", Value: 2, Trump: false, Player: 0, Place: "Deck", FightOrder: 20, SortOrder: 0},
 
-	{Id: 26, Suit: "Schellen", Rank: "Ass", Value: 11, Trump: false, Player: 0, Place: "Deck", FightOrder: 6, SortOrder: 15},
-	{Id: 27, Suit: "Schellen", Rank: "Zehn", Value: 10, Trump: false, Player: 0, Place: "Deck", FightOrder: 5, SortOrder: 14},
-	{Id: 28, Suit: "Schellen", Rank: "König", Value: 4, Trump: false, Player: 0, Place: "Deck", FightOrder: 4, SortOrder: 13},
-	{Id: 29, Suit: "Schellen", Rank: "Neun", Value: 0, Trump: false, Player: 0, Place: "Deck", FightOrder: 3, SortOrder: 12},
-	{Id: 30, Suit: "Schellen", Rank: "Acht", Value: 0, Trump: false, Player: 0, Place: "Deck", FightOrder: 2, SortOrder: 11},
-	{Id: 31, Suit: "Schellen", Rank: "Sieben", Value: 0, Trump: false, Player: 0, Place: "Deck", FightOrder: 1, SortOrder: 10},
+	{Id: 26, Suit: "Schellen", Rank: "Ass", Value: 11, Trump: false, Player: 0, Place: "Deck", FightOrder: 6, SortOrder: 0},
+	{Id: 27, Suit: "Schellen", Rank: "Zehn", Value: 10, Trump: false, Player: 0, Place: "Deck", FightOrder: 5, SortOrder: 0},
+	{Id: 28, Suit: "Schellen", Rank: "König", Value: 4, Trump: false, Player: 0, Place: "Deck", FightOrder: 4, SortOrder: 0},
+	{Id: 29, Suit: "Schellen", Rank: "Neun", Value: 0, Trump: false, Player: 0, Place: "Deck", FightOrder: 3, SortOrder: 0},
+	{Id: 30, Suit: "Schellen", Rank: "Acht", Value: 0, Trump: false, Player: 0, Place: "Deck", FightOrder: 2, SortOrder: 0},
+	{Id: 31, Suit: "Schellen", Rank: "Sieben", Value: 0, Trump: false, Player: 0, Place: "Deck", FightOrder: 1, SortOrder: 0},
 }
 
 var players []*Player
@@ -116,6 +116,9 @@ func dealCards() {
 		Deck[i].Player = i%4
 		Deck[i].Place = "Hand"
 	}
+	
+	setWenz()
+	setOrderWenz()
 }
 
 func setSolo(Suit string) {
@@ -126,6 +129,7 @@ func setSolo(Suit string) {
 			card.Trump = false
 		}
 	}
+	setOrderSoloRufspiel()
 }
 
 func setRufspiel() {
@@ -136,6 +140,7 @@ func setRufspiel() {
 			card.Trump = false
 		}
 	}
+	setOrderSoloRufspiel()
 }
 
 func setWenz() {
@@ -148,4 +153,62 @@ func setWenz() {
 	}
 }
 
+func setOrderSoloRufspiel() {
+	suitAdding := map[string]int{
+		"Eichel": 4,
+		"Gras":   3,
+		"Herz":   2,
+		"Schellen": 1,
+	}
+	rankAdding := map[string]int{
+		"As":   6,
+		"Zehn": 5,
+		"König": 4,
+		"Neun": 3,
+		"Acht": 2,
+		"Sieben": 1,
+	}
+	for _, card := range Deck {
+		if card.Trump {
+			if card.Rank == "Ober" {
+				card.SortOrder = 70 + suitAdding[card.Suit]
+			} else if card.Rank == "Unter" {
+				card.SortOrder = 60 + suitAdding[card.Suit]
+			} else {
+				card.SortOrder = 50 + suitAdding[card.Suit]
+			}
+		} else {
+			card.SortOrder = suitAdding[card.Suit] * 10 + rankAdding[card.Rank]
+		}
+	}
+}
+
+func setOrderWenz() {
+	suitAdding := map[string]int{
+		"Eichel": 4,
+		"Gras":   3,
+		"Herz":   2,
+		"Schellen": 1,
+	}
+	rankAdding := map[string]int{
+		"As":   7,
+		"Zehn": 6,
+		"König": 5,
+		"Ober": 4,
+		"Neun": 3,
+		"Acht": 2,
+		"Sieben": 1,
+	}
+	for _, card := range Deck {
+		if card.Trump {
+			if card.Rank == "Unter" {
+				card.SortOrder = 70 + suitAdding[card.Suit]
+			} else {
+				card.SortOrder = 50 + suitAdding[card.Suit]
+			}
+		} else {
+			card.SortOrder = suitAdding[card.Suit] * 10 + rankAdding[card.Rank]
+		}
+	}
+}
 

@@ -46,8 +46,6 @@ func renderHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	
-	
-
 	status := "none"
 	if(Deck[0].Place == "Hand") {
 		status = "shuffled"
